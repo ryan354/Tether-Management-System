@@ -40,6 +40,7 @@ git clone <your-repo> motor-control
 cd motor-control
 cd app
 pip install -r requirements.txt  # or python setup.py install
+bash setup.sh
 ```
 
 ### 2. Enable Service

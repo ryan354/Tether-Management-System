@@ -36,7 +36,7 @@
 ### 1. Clone & Setup
 ```bash
 cd /home/pi
-git clone <your-repo> motor-control
+git clone https://github.com/ryan354/Tether-Management-System.git
 cd motor-control
 cd app
 pip install -r requirements.txt  # or python setup.py install

@@ -1,135 +1,104 @@
-# Motor Control System for USV
-=======================
+# Motor Control System
 
-## 🎯 Project Summary
+Raspberry Pi motor controller for USV tether/launcher reels.
+Trapezoidal velocity profile + Feedforward-P control, with a web UI.
 
-**Raspberry Pi-based motor control system** for Unmanned Surface Vehicle (USV) tether/launcher reels with **trapezoidal velocity profile** control.
+## Quick Install (new Raspberry Pi)
 
-### Key Features
-- 🚀 **Trapezoidal velocity profile** (accel/decel ramps)
-- 🎛️ **Feedforward + PID** control 
-- 📡 **Modbus RTU encoder feedback** (Tether addr 1, Launcher addr 2)
-- ⚡ **PCA9685 PWM** (I2C bus 4, 250Hz)
-- 🌐 **FastAPI web UI** (`http://localhost:8888`)
-- 💾 **Persistent settings** (`app/config.json`)
-- 🔄 **systemd service** auto-start
-
-## 🛠️ Hardware Requirements
-
-```
-📦 Components:
-├── PCA9685 PWM controller (I2C 0x40)
-├── 2x HM Modbus encoders (RS485, addr 1+2)
-├── 2x Brushless motors w/ ESC (RC PWM)
-├── RS485 adapter (USB→/dev/ttyUSB0)
-└── Raspberry Pi 4/5
-
-🔌 Wiring:
-├── PCA9685 → I2C Bus 4
-├── Tether motor → PWM ch14
-├── Launcher motor → PWM ch15
-└── Encoders → /dev/ttyUSB0 (9600 baud)
-```
-
-## 🚀 Installation (New Raspberry Pi)
-
-### 1. Clone & Setup
 ```bash
-cd /home/pi
-git clone https://github.com/ryan354/Tether-Management-System.git
-cd motor-control
-cd app
-pip install -r requirements.txt  # or python setup.py install
+git clone https://github.com/ryan354/Tether-Management-System.git /home/pi/motor-control
+cd /home/pi/motor-control
 bash setup.sh
 ```
 
-### 2. Enable Service
+That's it. The service is now running and will auto-start on every boot.
+
+**Web UI:** `http://<pi-ip-address>:8888`
+
+## Hardware Wiring
+
+| Component | Connection |
+|-----------|------------|
+| PCA9685 PWM board | I2C bus 4, address 0x40 |
+| Tether motor ESC | PCA9685 channel 14 |
+| Launcher motor ESC | PCA9685 channel 15 |
+| RS485 encoders | USB `/dev/ttyUSB0`, 9600 baud |
+| Tether encoder | Modbus address 1 |
+| Launcher encoder | Modbus address 2 |
+
+**PWM range:** 700 (full CW) — 1000 (neutral) — 1300 (full CCW)
+
+## Service Management
+
 ```bash
-sudo cp app/motor-control.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable motor-control.service
-sudo systemctl start motor-control.service
+sudo systemctl status motor-control    # Check status
+sudo systemctl restart motor-control   # Restart
+sudo systemctl stop motor-control      # Stop
+journalctl -u motor-control -f         # Live logs
 ```
 
-### 3. Verify
+## Configuration
+
+All settings are editable from the web UI (Settings button) and saved to `app/config.json`.
+Changes persist across restarts.
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `serial_port` | Encoder serial port | `/dev/ttyUSB0` |
+| `baud_rate` | Serial baud rate | `9600` |
+| `encoder_resolution` | Pulses per revolution | `4096` |
+| `drum_circumference` | Drum circumference (m) | `0.2` |
+| `ff_gain` | Feedforward gain | `75` |
+| `kp` | Proportional gain | `9` |
+| `position_gain` | Length-to-speed gain | `1.0` |
+| `accel` / `decel` | Ramp rate (m/s per cycle) | `0.03` |
+
+## API
+
+Base URL: `http://<pi-ip>:8888/v1.0`
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/motors/status` | GET | All motor + encoder status |
+| `/motor/{id}/set` | POST | Set speed + length target |
+| `/motor/{id}/stop` | POST | Stop motor |
+| `/motor/{id}/pause_resume` | POST | Toggle pause/resume |
+| `/motor/{id}/direct_pwm?pwm_value=N` | POST | Direct PWM (700-1300, -1 to disable) |
+| `/motor/{id}/pid` | POST | Update controller gains |
+| `/config` | GET/POST | Read/write config |
+| `/encoder/status` | GET | Encoder data |
+| `/encoder/reset?which=tether` | POST | Zero encoder counter |
+
+## Troubleshooting
+
+**Service won't start:**
 ```bash
-sudo systemctl status motor-control.service
-curl http://localhost:8888  # Should show UI
-curl http://localhost:8888/v1.0/config  # Should show config
+journalctl -u motor-control -n 50 --no-pager
 ```
 
-### 4. Access UI
-```
-Web UI: http://raspberrypi.local:8888
-
-```
-
-## ⚙️ Configuration
-
-**All settings saved to `app/config.json` & persist across restarts**:
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serial_port` | Encoder serial | `/dev/ttyUSB0` |
-| `baud_rate` | Serial baud | `9600` |
-| `encoder_resolution` | Pulses/rev | `4096` |
-| `drum_circumference` | Wheel diam (m) | `0.2` |
-| `tether_ctrl.ff_gain` | Feedforward gain | `75` |
-| `tether_ctrl.kp` | PID Kp | `12` |
-| `tether_ctrl.position_gain` | Length → speed gain | `1.0` |
-| `tether_ctrl.accel` | Acceleration (m/s²) | `0.03` |
-| `launcher_ctrl.*` | Same for launcher | Same |
-
-**Tune via UI**: ⚙️ Settings → Apply → **Persists forever**
-
-## 🔧 Troubleshooting
-
-### Service Won't Start
+**No I2C (PCA9685 not found):**
 ```bash
-sudo systemctl status motor-control.service -l
-journalctl -u motor-control.service -f
+sudo raspi-config    # Interface Options > I2C > Enable
+sudo i2cdetect -y 4  # Should show 0x40
+sudo apt install python3-smbus
 ```
 
-**Common fixes**:
-```
-# IndentationError → cp app/main_trapezoidal app/main.py
-# PCA9685 missing → Install `python3-smbus`
-sudo apt install python3-smbus i2c-tools
-sudo i2cdetect -y 4  # Should show 40
-```
-
-### No Encoder Data
+**No encoder data:**
 ```bash
-ls /dev/ttyUSB*
-sudo minicom -D /dev/ttyUSB0 -b 9600  # Test encoders
-curl http://localhost:8888/v1.0/encoder/status
+ls /dev/ttyUSB*      # Check USB adapter is connected
 ```
 
-### PWM Not Working
-```bash
-sudo i2cdetect -y 4  # PCA9685 must show 40
-sudo raspi-config → Interfacing → Enable I2C
+## Project Structure
+
 ```
-
-
-
-
-## ⚠️ Important Notes
-
-1. **PWM Range**: 700=Full CW, 1000=Neutral, 1300=Full CCW
-2. **Encoder Addresses**: Modbus addr 1=tether, 2=launcher
-3. **Trapezoidal**: Smooth accel/decel prevents ESC damage
-4. **Auto-save**: All UI settings → `config.json` → survive reboots
-5. **Backup**: `main.py.bak2` has last working version
-
-## 📱 Web UI Controls
-
-| Control | Description |
-|---------|-------------|
-| 🎛️ Speed Slider | 0-2 m/s trapezoidal ramp |
-| 📏 Cable Length | Length setpoint (outer PID loop) |
-| ⚡ Direct PWM | Raw RC PWM (bypass controller) |
-| ⚙️ Settings | Tune FF/Kp/accel (persists!) |
-| 🎯 Master | Apply same to both motors |
-
-
+motor-control/
+├── setup.sh                  # One-step installer
+├── app/
+│   ├── main.py               # FastAPI server + motor controller
+│   ├── encoder.py            # Modbus RTU encoder reader
+│   ├── config.json           # Persistent settings
+│   ├── static/index.html     # Web UI
+│   ├── motor-control.service # systemd unit file
+│   └── requirements.txt      # Python dependencies
+└── README.md
+```

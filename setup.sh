@@ -1,106 +1,51 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Motor Control Setup Script"
-echo "============================="
+# ─── Motor Control - One-Step Installer ─────────────────────────────────────
+# Usage: git clone <repo> /home/pi/motor-control && cd motor-control && bash setup.sh
+# ─────────────────────────────────────────────────────────────────────────────
 
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Check if running as root or pi
-if [[ $EUID -eq 0 ]]; then
-   echo -e "${RED}This script should NOT be run as root. Run as 'pi' user.${NC}"
-   exit 1
-fi
-
-cd "$(dirname "$0")"
-
-PROJECT_DIR="/home/pi/motor-control"
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_DIR="$PROJECT_DIR/app"
+SERVICE_FILE="motor-control.service"
 
-echo -e "${GREEN}1. Updating system...${NC}"
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y python3-pip python3-venv python3-smbus i2c-tools python3-serial raspi-config git
+echo -e "${GREEN}Motor Control - Installer${NC}"
+echo "=========================================="
 
-echo -e "${GREEN}2. Enabling I2C interface...${NC}"
-sudo raspi-config nonint do_i2c 1
+# ── 1. System dependencies ──────────────────────────────────────────────────
+echo -e "\n${GREEN}[1/4] Installing system packages...${NC}"
+sudo apt-get update -qq
+sudo apt-get install -y -qq python3-pip python3-smbus i2c-tools > /dev/null
 
-echo -e "${GREEN}3. Generating requirements.txt...${NC}"
-cd app
-pipreqs --force . || echo "pipreqs failed, creating manually..."
+# ── 2. Python dependencies ──────────────────────────────────────────────────
+echo -e "${GREEN}[2/4] Installing Python packages...${NC}"
+pip3 install -q -r "$APP_DIR/requirements.txt"
 
-if [ ! -f requirements.txt ]; then
-    cat > requirements.txt << 'EOF'
-fastapi>=0.100.0
-uvicorn[standard]>=0.23.0
-fastapi-versioning>=1.0.0
-loguru>=0.7.0
-pydantic>=2.0.0
-pyserial>=3.5
-EOF
-fi
+# ── 3. Enable I2C (needed for PCA9685 PWM) ─────────────────────────────────
+echo -e "${GREEN}[3/4] Enabling I2C interface...${NC}"
+sudo raspi-config nonint do_i2c 0 2>/dev/null || echo -e "${YELLOW}  Could not auto-enable I2C. Enable manually via sudo raspi-config.${NC}"
 
-echo -e "${GREEN}4. Creating Python virtual environment...${NC}"
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-
-echo -e "${GREEN}5. Installing service...${NC}"
-sudo cp motor-control.service /etc/systemd/system/
+# ── 4. Install & start systemd service ──────────────────────────────────────
+echo -e "${GREEN}[4/4] Installing systemd service...${NC}"
+sudo cp "$APP_DIR/$SERVICE_FILE" /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable motor-control.service
+sudo systemctl enable $SERVICE_FILE
+sudo systemctl restart $SERVICE_FILE
 
-echo -e "${GREEN}6. Setting up Git repository...${NC}"
-cd "$PROJECT_DIR"
-if [ ! -d .git ]; then
-    git init
-    cat > .gitignore << 'EOF'
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-env.bak/
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Logs
-*.log
-motor.log
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Backups
-backups/
-EOF
-    git add .
-    git commit -m "Initial commit: Motor control system with FastAPI + trapezoidal control"
-    echo -e "${GREEN}✅ Git repository initialized and initial commit created${NC}"
-    echo -e "${YELLOW}To push to remote: git remote add origin <url> && git push -u origin main${NC}"
-else
-    echo -e "${YELLOW}Git repo already exists${NC}"
-fi
-
-echo -e "${GREEN}7. Starting service...${NC}"
-sudo systemctl restart motor-control.service
-sudo systemctl status motor-control.service --no-pager -l
-
-echo -e "\n${GREEN}🎉 Setup complete!${NC}"
-echo -e "${YELLOW}Access the web UI:${NC} http://localhost:8888 or http://$(hostname).local:8888"
-echo -e "${YELLOW}Service logs:${NC} journalctl -u motor-control.service -f"
-echo -e "${YELLOW}Test API:${NC} curl http://localhost:8888/v1.0/motors/status"
-echo -e "${GREEN}Run this script anytime to update/refresh setup.${NC}"
-
+# ── Done ────────────────────────────────────────────────────────────────────
+echo ""
+echo -e "${GREEN}=========================================="
+echo -e "  Installation complete!"
+echo -e "==========================================${NC}"
+echo ""
+echo -e "  Web UI:  ${YELLOW}http://$(hostname -I | awk '{print $1}'):8888${NC}"
+echo -e "  Logs:    ${YELLOW}journalctl -u motor-control -f${NC}"
+echo -e "  Status:  ${YELLOW}sudo systemctl status motor-control${NC}"
+echo ""
+echo -e "  The service starts automatically on boot."
+echo ""

@@ -35,15 +35,17 @@ DEFAULT_CONFIG = {
 def load_config():
     if os.path.exists(CONFIG_FILE):
         try:
-            return json.load(open(CONFIG_FILE))
-        except:
-            pass
+            with open(CONFIG_FILE) as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning(f"Failed to load config, using defaults: {e}")
     return DEFAULT_CONFIG.copy()
 
 def save_config(config):
     try:
         os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
-        json.dump(config, open(CONFIG_FILE, "w"))
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config, f)
     except Exception as e:
         logger.error(f"Failed to save config: {e}")
 
@@ -106,8 +108,8 @@ try:
                 bus.write_byte_data(PCA9685_ADDR, reg, 0)
                 bus.write_byte_data(PCA9685_ADDR, reg + 2, value & 0xFF)
                 bus.write_byte_data(PCA9685_ADDR, reg + 3, (value >> 8) & 0xFF)
-            except:
-                logger.error(f"Failed to set PWM channel {channel} to {value}")
+            except OSError as e2:
+                logger.error(f"Failed to set PWM channel {channel} to {value}: {e2}")
     
     def enable_pwm():
         pass  # Already enabled
@@ -570,8 +572,6 @@ async def set_config(config: dict) -> Any:
         "encoder_resolution": CONFIG.get("encoder_resolution", 4096),
         "drum_circumference": CONFIG.get("drum_circumference", 0.2)
     })
-    encoder_reader.add_encoder(CONFIG.get("tether_encoder_address", 1), "Tether")
-    encoder_reader.add_encoder(CONFIG.get("launcher_encoder_address", 2), "Launcher")
     encoder_reader.start()
     
     # Update motor controller config
@@ -582,7 +582,16 @@ async def set_config(config: dict) -> Any:
             cfg = CONFIG.get("launcher_ctrl", {})
         else:
             continue
-        motor.set_controller_config(ControllerConfig(**cfg))
+        # Normalize config keys: config.json uses "accel"/"decel",
+        # ControllerConfig expects "accel_rate"/"decel_rate"
+        normalized = {
+            "ff_gain": cfg.get("ff_gain", 150.0),
+            "kp": cfg.get("kp", 15.0),
+            "position_gain": cfg.get("position_gain", 2.0),
+            "accel_rate": cfg.get("accel_rate", cfg.get("accel", 0.05)),
+            "decel_rate": cfg.get("decel_rate", cfg.get("decel", 0.05)),
+        }
+        motor.set_controller_config(ControllerConfig(**normalized))
     
     logger.info("Config updated and encoder restarted")
     return {"status": "ok", "config": CONFIG}
@@ -641,8 +650,6 @@ async def startup_event():
         "encoder_resolution": CONFIG.get("encoder_resolution", 4096),
         "drum_circumference": CONFIG.get("drum_circumference", 0.2)
     })
-    encoder_reader.add_encoder(CONFIG.get("tether_encoder_address", 1), "Tether")
-    encoder_reader.add_encoder(CONFIG.get("launcher_encoder_address", 2), "Launcher")
     encoder_reader.start()
     logger.info("Encoder reader initialized on startup")
 

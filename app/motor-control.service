@@ -4,9 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
-User=pi
-WorkingDirectory=/home/pi/motor-control/app
-ExecStart=/usr/bin/python3 -u main.py
+User=tms
+WorkingDirectory=/home/tms/Tether-Management-System/app
+ExecStart=/home/tms/Tether-Management-System/venv/bin/python -u main.py
 Restart=always
 RestartSec=5
 

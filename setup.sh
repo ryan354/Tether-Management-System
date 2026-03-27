@@ -12,6 +12,7 @@ NC='\033[0m'
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_DIR="$PROJECT_DIR/app"
+VENV_DIR="$PROJECT_DIR/venv"
 SERVICE_FILE="motor-control.service"
 
 echo -e "${GREEN}Motor Control - Installer${NC}"
@@ -20,11 +21,12 @@ echo "=========================================="
 # ── 1. System dependencies ──────────────────────────────────────────────────
 echo -e "\n${GREEN}[1/4] Installing system packages...${NC}"
 sudo apt-get update -qq
-sudo apt-get install -y -qq python3-pip python3-smbus i2c-tools > /dev/null
+sudo apt-get install -y -qq python3-pip python3-venv python3-smbus i2c-tools > /dev/null
 
-# ── 2. Python dependencies ──────────────────────────────────────────────────
-echo -e "${GREEN}[2/4] Installing Python packages...${NC}"
-pip3 install -q -r "$APP_DIR/requirements.txt"
+# ── 2. Python virtual environment & dependencies ─────────────────────────────
+echo -e "${GREEN}[2/4] Creating venv & installing Python packages...${NC}"
+python3 -m venv "$VENV_DIR"
+"$VENV_DIR/bin/pip" install -q -r "$APP_DIR/requirements.txt"
 
 # ── 3. Enable I2C (needed for PCA9685 PWM) ─────────────────────────────────
 echo -e "${GREEN}[3/4] Enabling I2C interface...${NC}"

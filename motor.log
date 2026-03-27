@@ -1,9 +1,0 @@
-2026-03-25 02:22:25.197 | INFO     | __main__:<module>:44 - PCA9685 PWM initialized at 250 Hz via I2C
-2026-03-25 02:22:25.204 | INFO     | __main__:<module>:289 - Starting MotorControlExtension!
-2026-03-25 02:22:25.205 | INFO     | __main__:<module>:291 - Navigator active - PWM freq: 250 Hz
-Traceback (most recent call last):
-  File "/home/pi/motor-control/app/main.py", line 414, in <module>
-    app.mount("/", StaticFiles(directory="static", html=True), name="static")
-  File "/home/pi/.local/lib/python3.9/site-packages/starlette/staticfiles.py", line 56, in __init__
-    raise RuntimeError(f"Directory '{directory}' does not exist")
-RuntimeError: Directory 'static' does not exist

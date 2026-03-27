@@ -1,0 +1,7 @@
+2026-03-24 06:39:47.551 | INFO     | main:<module>:166 - Starting MotorControlExtension!
+INFO:     Started server process [22204]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8000): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.

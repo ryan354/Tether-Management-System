@@ -1,0 +1,1 @@
+# Python\n__pycache__/\n*.py[cod]\n*$py.class\n*.so\n.Python\nvenv/\nenv/\nenv.bak/\npip-log.txt\npip-delete-this-directory.txt\n\n# Logs\n*.log\nmotor.log\n\n# OS\n.DS_Store\nThumbs.db\n\n# IDE\n.vscode/\n.idea/\n\n# Backups\nbackups/

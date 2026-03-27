@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tether Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            color: #58a6ff;
+            text-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #8b949e;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        
+        .motors-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .motor-card {
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            width: 520px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .motor-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .motor1-card h2 {
+            color: #f85149;
+        }
+        
+        .motor2-card h2 {
+            color: #3fb950;
+        }
+        
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(63, 185, 80, 0.2);
+            color: #3fb950;
+        }
+        
+        .control-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+        
+        .control-section h3 {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+        }
+        
+        .speed-slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #21262d;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        
+        .motor1-card .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f85149, #da3633);
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(248, 81, 73, 0.5);
+            border: 3px solid #fff;
+        }
+        
+        .motor2-card .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3fb950, #2ea043);
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(63, 185, 80, 0.5);
+            border: 3px solid #fff;
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #8b949e;
+            margin-top: 5px;
+        }
+        
+        .slider-value {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        
+        .motor1-card .slider-value {
+            color: #f85149;
+        }
+        
+        .motor2-card .slider-value {
+            color: #3fb950;
+        }
+        
+        /* Cable Length Controls */
+        .cable-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .cable-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .motor1-card .cable-btn {
+            background: linear-gradient(135deg, #f85149, #da3633);
+            color: #fff;
+        }
+        
+        .motor1-card .cable-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(248, 81, 73, 0.5);
+        }
+        
+        .motor2-card .cable-btn {
+            background: linear-gradient(135deg, #3fb950, #2ea043);
+            color: #fff;
+        }
+        
+        .motor2-card .cable-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(63, 185, 80, 0.5);
+        }
+        
+        .cable-input {
+            width: 120px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #30363d;
+            background: #21262d;
+            color: #fff;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        .cable-input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+        
+        .unit-label {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        
+        /* Feedback Display */
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .feedback-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #30363d;
+        }
+        
+        .feedback-box .label {
+            font-size: 0.75rem;
+            color: #8b949e;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        
+        .feedback-box .value {
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+        
+        .motor1-card .feedback-box .value {
+            color: #f85149;
+        }
+        
+        .motor2-card .feedback-box .value {
+            color: #3fb950;
+        }
+        
+        /* PWM Output */
+        .pwm-bar {
+            margin-top: 15px;
+            background: #21262d;
+            border-radius: 8px;
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .pwm-fill {
+            height: 100%;
+            transition: width 0.1s;
+            border-radius: 8px;
+        }
+        
+        .motor1-card .pwm-fill {
+            background: linear-gradient(90deg, #f85149, #ff7b72);
+        }
+        
+        .motor2-card .pwm-fill {
+            background: linear-gradient(90deg, #3fb950, #7ee787);
+        }
+        
+        .pwm-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        /* PID Info */
+        .pid-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #8b949e;
+        }
+        
+        .pid-info span {
+            background: rgba(88, 166, 255, 0.1);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        
+        /* Direct PWM Control */
+        .direct-pwm-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(88, 166, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+        }
+        
+        .direct-pwm-section h3 {
+            font-size: 0.85rem;
+            color: #58a6ff;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .direct-pwm-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .direct-pwm-toggle input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .direct-pwm-toggle label {
+            font-size: 0.9rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .pwm-slider-direct {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #f85149 0%, #f85149 30%, #58a6ff 50%, #3fb950 70%, #3fb950 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        /* Gradient: 700(red) -> 1000(blue) -> 1300(green) */
+        
+        .pwm-slider-direct::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            border: 3px solid #58a6ff;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+        }
+        
+        /* Control Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #30363d;
+            background: transparent;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .mode-btn.active {
+            border-color: #58a6ff;
+            background: rgba(88, 166, 255, 0.1);
+            color: #58a6ff;
+        }
+        
+        @media (max-width: 1100px) {
+            .motors-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .motor-card {
+                width: 100%;
+                max-width: 520px;
+            }
+        }
+        
+        /* Master Control */
+        .master-control {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #58a6ff;
+            box-shadow: 0 0 30px rgba(88, 166, 255, 0.2);
+        }
+        
+        .master-control h2 {
+            text-align: center;
+            color: #58a6ff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .master-controls {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .master-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .master-item label {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        
+        .master-slider-container {
+            width: 250px;
+        }
+        
+        .master-slider-container input[type="range"] {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: #21262d;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        
+        .master-slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #58a6ff, #1f40f5);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.5);
+            border: 3px solid #fff;
+        }
+        
+        .master-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #8b949e;
+            margin-top: 5px;
+        }
+        
+        .master-value {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #58a6ff;
+        }
+        
+        .master-cable-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .master-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #58a6ff, #1f40f5);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .master-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.5);
+        }
+        
+        .master-cable-controls input {
+            width: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #30363d;
+            background: #21262d;
+            color: #fff;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .master-apply {
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #58a6ff, #1f40f5);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .master-apply:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(88, 166, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+<!-- Settings Modal -->
+<div id="settingsModal" style="display:none;position:fixed;z-index:999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.8)">
+<div style="background:#161b22;margin:5% auto;padding:20px;border-radius:10px;width:90%;max-width:650px;max-height:85vh;overflow-y:auto">
+<div style="display:flex;justify-content:space-between;margin-bottom:15px;border-bottom:1px solid #30363d;padding-bottom:10px">
+<h2 style="color:#58a6ff;margin:0">⚙️ Settings</h2>
+<span onclick="closeSettings()" style="cursor:pointer;font-size:24px;color:#8b949e">×</span>
+</div>
+
+<div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
+<h3 style="color:#58a6ff;margin:0 0 10px 0;font-size:14px">🔌 Serial</h3>
+<div style="margin-bottom:10px"><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Serial Port:</label><select id="config-serial-port" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></select></div>
+<div><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Baud Rate:</label><select id="config-baud-rate" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"><option value="9600">9600</option><option value="19200">19200</option><option value="38400">38400</option></select></div>
+</div>
+
+<div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
+<h3 style="color:#58a6ff;margin:0 0 10px 0;font-size:14px">📟 Encoder Settings</h3>
+<div style="margin-bottom:10px"><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Tether (Address 1):</label><input type="number" id="config-tether-addr" min="1" max="247" value="1" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="margin-bottom:10px"><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Launcher (Address 2):</label><input type="number" id="config-launcher-addr" min="1" max="247" value="2" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="margin-bottom:10px"><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Encoder PPR (pulses/rev):</label><input type="number" id="config-resolution" min="1" value="4096" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Wheel Diameter (m):</label><input type="number" id="config-drum-circ" min="0.01" step="0.01" value="0.2" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+</div>
+
+<div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
+<h3 style="color:#58a6ff;margin:0 0 10px 0;font-size:14px">🚀 Tether Trapezoidal</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">FF Gain</label><input type="number" id="config-tether-ff-gain" step="1" value="75" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Kp</label><input type="number" id="config-tether-kp" step="0.1" value="12" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Pos Gain</label><input type="number" id="config-tether-position-gain" step="0.1" value="1.0" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Accel (m/s²)</label><input type="number" id="config-tether-accel" step="0.01" value="0.03" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+</div>
+</div>
+
+<div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
+<h3 style="color:#58a6ff;margin:0 0 10px 0;font-size:14px">🚀 Launcher Trapezoidal</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">FF Gain</label><input type="number" id="config-launcher-ff-gain" step="1" value="75" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Kp</label><input type="number" id="config-launcher-kp" step="0.1" value="12" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Pos Gain</label><input type="number" id="config-launcher-position-gain" step="0.1" value="1.0" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Accel (m/s²)</label><input type="number" id="config-launcher-accel" step="0.01" value="0.03" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+</div>
+</div>
+
+<div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
+<h3 style="color:#58a6ff;margin:0 0 10px 0;font-size:14px">🔄 Reset Counters</h3>
+<button onclick="resetEncoder('tether')" style="padding:8px 15px;background:#f85149;border:none;border-radius:6px;color:#fff;cursor:pointer;margin-right:10px">Reset Tether</button>
+<button onclick="resetEncoder('launcher')" style="padding:8px 15px;background:#f85149;border:none;border-radius:6px;color:#fff;cursor:pointer">Reset Launcher</button>
+</div>
+
+<div style="margin-top:20px"><button onclick="saveSettings()" style="padding:10px 30px;background:#238636;border:none;border-radius:8px;color:#fff;cursor:pointer;margin-right:10px">Apply</button><button onclick="closeSettings()" style="padding:10px 30px;background:#30363d;border:none;border-radius:8px;color:#fff;cursor:pointer">Cancel</button></div>
+</div>
+</div>
+    <div class="container">
+        <h1>Tether Management System</h1>
+        <p class="subtitle"></p>
+        
+        <div style="text-align:right;margin:10px 0">
+            <button onclick="openSettings()" style="padding:8px 16px;background:#484f58;border:none;border-radius:6px;color:#fff;cursor:pointer">⚙️ Settings</button>
+        </div>
+        
+        <!-- Master Control -->
+        <div class="master-control">
+            <h2>🎛️ Master Control</h2>
+            <div class="master-controls">
+                <div class="master-item">
+                    <label>🎯 Desired Speed (0 - 2 m/s)</label>
+                    <div class="master-slider-container">
+                        <input type="range" id="master-speed" min="0" max="2" step="0.01" value="0">
+                        <div class="master-labels">
+                            <span>0</span><span>1</span><span>2 m/s</span>
+                        </div>
+                        <div class="master-value"><span id="master-speed-value">0.00</span> m/s</div>
+                    </div>
+                </div>
+                <div class="master-item">
+                    <label>📏 Desired Cable Length (0 - 20 m)</label>
+                    <div class="master-cable-controls">
+                        <button class="master-btn" onclick="adjustMasterCable(-0.5)">−</button>
+                        <input type="number" id="master-cable" min="0" max="20" step="0.5" value="0">
+                        <button class="master-btn" onclick="adjustMasterCable(0.5)">+</button>
+                        <span class="unit-label">m</span>
+                    </div>
+                </div>
+                <button class="master-apply" onclick="applyMasterControl()">Apply to Both</button>
+            </div>
+        </div>
+        
+        <div class="motors-container">
+            <!-- Motor 1 -->
+            <div class="motor-card motor1-card">
+                <h2>🔴 Tether Reel <span class="status-badge" id="motor1-mode">SPEED</span> <span id="motor1-direction" style="padding:2px 8px;border-radius:4px;font-size:11px;background:#30363d;color:#8b949e">STOPPED</span></h2>
+                
+                <!-- Desired Speed -->
+                <div class="control-section">
+                    <h3>🎯 Desired Speed (0 - 2 m/s)</h3>
+                    <div class="slider-container">
+                        <input type="range" class="speed-slider" id="motor1-speed" min="0" max="2" step="0.01" value="0">
+                        <div class="slider-labels">
+                            <span>0</span>
+                            <span>1</span>
+                            <span>2 m/s</span>
+                        </div>
+                        <div class="slider-value"><span id="motor1-speed-value">0.00</span> <span class="unit-label">m/s</span></div>
+                    </div>
+                </div>
+                
+                <!-- Desired Cable Length -->
+                <div class="control-section">
+                    <h3>📏 Desired Cable Length (0 - 20 m)</h3>
+                    <div class="cable-controls">
+                        <button class="cable-btn" onclick="adjustCable('motor1', -0.5)">−</button>
+                        <input type="number" class="cable-input" id="motor1-cable" min="0" max="20" step="0.5" value="0">
+                        <button class="cable-btn" onclick="adjustCable('motor1', 0.5)">+</button>
+                        <span class="unit-label">m</span>
+                    </div>
+                </div>
+                
+                <!-- Feedback Section -->
+                <div class="control-section">
+                    <h3>📊 Current Feedback (Encoder)</h3>
+                    <div class="feedback-grid">
+                        <div class="feedback-box">
+                            <div class="label">Cable Speed</div>
+                            <div class="value"><span id="motor1-current-speed">0.00</span> <span class="unit-label">m/s</span></div>
+                        </div>
+                        <div class="feedback-box">
+                            <div class="label">Current Cable</div>
+                            <div class="value"><span id="motor1-current-length">0.00</span> <span class="unit-label">m</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="pwm-bar">
+                        <div class="pwm-fill" id="motor1-pwm-fill" style="width: 0%"></div>
+                        <span class="pwm-text">PWM: <span id="motor1-pwm">1000</span></span>
+                    </div>
+                </div>
+                
+
+                
+                <!-- Stop / Continue -->
+                <div style="text-align:center;margin-top:12px">
+                    <button id="motor1-stop-btn" onclick="toggleMotorStop('motor1')"
+                        style="padding:10px 30px;border-radius:10px;border:none;font-size:1rem;font-weight:bold;cursor:pointer;background:#f85149;color:#fff;width:100%">
+                        ⏹ STOP
+                    </button>
+                </div>
+
+                <!-- Direct PWM Control -->
+                <div class="direct-pwm-section">
+                    <h3>⚡ Direct PWM Control (ROLL IN - ROLL OUT)</h3>
+                    <div class="direct-pwm-toggle">
+                        <input type="checkbox" id="motor1-direct-enable" onchange="toggleDirectPWM('motor1')">
+                        <label for="motor1-direct-enable">Enable Direct Mode</label>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="pwm-slider-direct" id="motor1-direct-pwm" min="700" max="1300" value="1000" disabled>
+                        <div class="slider-labels">
+                            <span>ROLL IN</span>
+                            <span>1000</span>
+                            <span>ROLL OUT</span>
+                        </div>
+                        <div class="slider-value" style="color: #58a6ff;"><span id="motor1-direct-pwm-value">1000</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Motor 2 -->
+            <div class="motor-card motor2-card">
+                <h2>🟢 Launcher Reel <span class="status-badge" id="motor2-mode">SPEED</span> <span id="motor2-direction" style="padding:2px 8px;border-radius:4px;font-size:11px;background:#30363d;color:#8b949e">STOPPED</span></h2>
+                
+                <!-- Desired Speed -->
+                <div class="control-section">
+                    <h3>🎯 Desired Speed (0 - 2 m/s)</h3>
+                    <div class="slider-container">
+                        <input type="range" class="speed-slider" id="motor2-speed" min="0" max="2" step="0.01" value="0">
+                        <div class="slider-labels">
+                            <span>0</span>
+                            <span>1</span>
+                            <span>2 m/s</span>
+                        </div>
+                        <div class="slider-value"><span id="motor2-speed-value">0.00</span> <span class="unit-label">m/s</span></div>
+                    </div>
+                </div>
+                
+                <!-- Desired Cable Length -->
+                <div class="control-section">
+                    <h3>📏 Desired Cable Length (0 - 20 m)</h3>
+                    <div class="cable-controls">
+                        <button class="cable-btn" onclick="adjustCable('motor2', -0.5)">−</button>
+                        <input type="number" class="cable-input" id="motor2-cable" min="0" max="20" step="0.5" value="0">
+                        <button class="cable-btn" onclick="adjustCable('motor2', 0.5)">+</button>
+                        <span class="unit-label">m</span>
+                    </div>
+                </div>
+                
+                <!-- Feedback Section -->
+                <div class="control-section">
+                    <h3>📊 Current Feedback (Encoder)</h3>
+                    <div class="feedback-grid">
+                        <div class="feedback-box">
+                            <div class="label">Cable Speed</div>
+                            <div class="value"><span id="motor2-current-speed">0.00</span> <span class="unit-label">m/s</span></div>
+                        </div>
+                        <div class="feedback-box">
+                            <div class="label">Current Cable</div>
+                            <div class="value"><span id="motor2-current-length">0.00</span> <span class="unit-label">m</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="pwm-bar">
+                        <div class="pwm-fill" id="motor2-pwm-fill" style="width: 0%"></div>
+                        <span class="pwm-text">PWM: <span id="motor2-pwm">1000</span></span>
+                    </div>
+                </div>
+                
+
+                
+                <!-- Stop / Continue -->
+                <div style="text-align:center;margin-top:12px">
+                    <button id="motor2-stop-btn" onclick="toggleMotorStop('motor2')"
+                        style="padding:10px 30px;border-radius:10px;border:none;font-size:1rem;font-weight:bold;cursor:pointer;background:#3fb950;color:#fff;width:100%">
+                        ⏹ STOP
+                    </button>
+                </div>
+
+                <!-- Direct PWM Control -->
+                <div class="direct-pwm-section">
+                    <h3>⚡ Direct PWM Control (ROLL IN - ROLL OUT)</h3>
+                    <div class="direct-pwm-toggle">
+                        <input type="checkbox" id="motor2-direct-enable" onchange="toggleDirectPWM('motor2')">
+                        <label for="motor2-direct-enable">Enable Direct Mode</label>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="pwm-slider-direct" id="motor2-direct-pwm" min="700" max="1300" value="1000" disabled>
+                        <div class="slider-labels">
+                            <span>ROLL IN</span>
+                            <span>1000</span>
+                            <span>ROLL OUT</span>
+                        </div>
+                        <div class="slider-value" style="color: #58a6ff;"><span id="motor2-direct-pwm-value">1000</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/v1.0';
+        
+        // Track stopped state per motor
+        const motorStopped = { motor1: false, motor2: false };
+        // Store last setpoints so we can resume after stop
+        const motorLastSetpoint = {
+            motor1: { speed: 0, length: 0 },
+            motor2: { speed: 0, length: 0 }
+        };
+
+        async function toggleMotorStop(motorId) {
+            const btn = document.getElementById(motorId + '-stop-btn');
+            if (!motorStopped[motorId]) {
+                // Save current setpoints before stopping
+                motorLastSetpoint[motorId].speed  = parseFloat(document.getElementById(motorId + '-speed').value);
+                motorLastSetpoint[motorId].length = parseFloat(document.getElementById(motorId + '-cable').value);
+                // Stop motor
+                await fetch(`${API_BASE}/motor/${motorId}/stop`, { method: 'POST' });
+                motorStopped[motorId] = true;
+                btn.textContent = '▶ CONTINUE';
+                btn.style.background = motorId === 'motor1' ? '#388bfd' : '#388bfd';
+            } else {
+                // Resume: restore last setpoints
+                const sp = motorLastSetpoint[motorId];
+                document.getElementById(motorId + '-speed').value = sp.speed;
+                document.getElementById(motorId + '-speed-value').textContent = sp.speed.toFixed(2);
+                document.getElementById(motorId + '-cable').value = sp.length;
+                await fetch(`${API_BASE}/motor/${motorId}/set`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ desired_speed: sp.speed, desired_length: sp.length })
+                });
+                motorStopped[motorId] = false;
+                btn.textContent = '⏹ STOP';
+                btn.style.background = motorId === 'motor1' ? '#f85149' : '#3fb950';
+            }
+        }
+        
+        // Settings Modal
+        function openSettings() { document.getElementById('settingsModal').style.display='block'; loadConfig(); }
+        function closeSettings() { document.getElementById('settingsModal').style.display='none'; }
+async function loadConfig() {
+            try {
+                const c = await fetch(API_BASE + '/config').then(r => r.json());
+                document.getElementById('config-serial-port').innerHTML = '<option>' + (c.serial_port || '/dev/ttyUSB0') + '</option>';
+                document.getElementById('config-baud-rate').value = c.baud_rate || 9600;
+                document.getElementById('config-tether-addr').value = c.tether_encoder_address || 1;
+                document.getElementById('config-launcher-addr').value = c.launcher_encoder_address || 2;
+                document.getElementById('config-resolution').value = c.encoder_resolution || 4096;
+                document.getElementById('config-drum-circ').value = c.drum_circumference || 0.2;
+                const tc = c.tether_ctrl || {};
+                document.getElementById('config-tether-ff-gain').value = tc.ff_gain || 75;
+                document.getElementById('config-tether-kp').value = tc.kp || 12;
+                document.getElementById('config-tether-position-gain').value = tc.position_gain || 1.0;
+                document.getElementById('config-tether-accel').value = tc.accel || 0.03;
+                const lc = c.launcher_ctrl || {};
+                document.getElementById('config-launcher-ff-gain').value = lc.ff_gain || 75;
+                document.getElementById('config-launcher-kp').value = lc.kp || 12;
+                document.getElementById('config-launcher-position-gain').value = lc.position_gain || 1.0;
+                document.getElementById('config-launcher-accel').value = lc.accel || 0.03;
+            } catch(e) { console.error(e); }
+        }
+async function saveSettings() {
+            try {
+                await fetch(API_BASE + '/config', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({
+                    serial_port: document.getElementById('config-serial-port').value,
+                    baud_rate: parseInt(document.getElementById('config-baud-rate').value),
+                    tether_encoder_address: parseInt(document.getElementById('config-tether-addr').value),
+                    launcher_encoder_address: parseInt(document.getElementById('config-launcher-addr').value),
+                    encoder_resolution: parseInt(document.getElementById('config-resolution').value),
+                    drum_circumference: parseFloat(document.getElementById('config-drum-circ').value),
+                    tether_ctrl: { 
+                        ff_gain: parseFloat(document.getElementById('config-tether-ff-gain').value || 75),
+                        kp: parseFloat(document.getElementById('config-tether-kp').value || 12),
+                        position_gain: parseFloat(document.getElementById('config-tether-position-gain').value || 1.0),
+                        accel: parseFloat(document.getElementById('config-tether-accel').value || 0.03),
+                        decel: parseFloat(document.getElementById('config-tether-accel').value || 0.03)
+                    },
+                    launcher_ctrl: { 
+                        ff_gain: parseFloat(document.getElementById('config-launcher-ff-gain').value || 75),
+                        kp: parseFloat(document.getElementById('config-launcher-kp').value || 12),
+                        position_gain: parseFloat(document.getElementById('config-launcher-position-gain').value || 1.0),
+                        accel: parseFloat(document.getElementById('config-launcher-accel').value || 0.03),
+                        decel: parseFloat(document.getElementById('config-launcher-accel').value || 0.03)
+                    }
+                })});
+                closeSettings(); alert('Settings saved! Restart service to apply.');
+            } catch(e) { alert('Failed to save'); }
+        }
+        async function resetEncoder(which) {
+            if(confirm('Reset ' + which + ' encoder?')) {
+                await fetch(API_BASE + '/encoder/reset?which=' + which, {method: 'POST'});
+                alert(which + ' reset!');
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Speed sliders
+            const m1Speed = document.getElementById('motor1-speed');
+            if (m1Speed) {
+                m1Speed.addEventListener('input', (e) => {
+                    console.log('Motor1 speed changed:', e.target.value);
+                    document.getElementById('motor1-speed-value').textContent = parseFloat(e.target.value).toFixed(2);
+                    updateMotor('motor1');
+                });
+            }
+            
+            const m2Speed = document.getElementById('motor2-speed');
+            if (m2Speed) {
+                m2Speed.addEventListener('input', (e) => {
+                    console.log('Motor2 speed changed:', e.target.value);
+                    document.getElementById('motor2-speed-value').textContent = parseFloat(e.target.value).toFixed(2);
+                    updateMotor('motor2');
+                });
+            }
+            
+            // Cable inputs
+            const m1Cable = document.getElementById('motor1-cable');
+            if (m1Cable) {
+                m1Cable.addEventListener('change', () => {
+                    console.log('Motor1 cable changed');
+                    updateMotor('motor1');
+                });
+            }
+            const m2Cable = document.getElementById('motor2-cable');
+            if (m2Cable) {
+                m2Cable.addEventListener('change', () => {
+                    console.log('Motor2 cable changed');
+                    updateMotor('motor2');
+                });
+            }
+            
+            // Master controls
+            document.getElementById('master-speed').addEventListener('input', (e) => {
+                document.getElementById('master-speed-value').textContent = parseFloat(e.target.value).toFixed(2);
+            });
+            
+            // Get initial status
+            fetchStatus();
+            // Update more frequently for PID control
+            setInterval(fetchStatus, 100);
+        });
+        
+        
+        function adjustCable(motor, delta) {
+            const input = document.getElementById(motor + '-cable');
+            let value = parseFloat(input.value) + delta;
+            value = Math.max(0, Math.min(20, value));
+            input.value = value;
+            updateMotor(motor);
+        }
+        
+        function adjustMasterCable(delta) {
+            const input = document.getElementById('master-cable');
+            let value = parseFloat(input.value) + delta;
+            value = Math.max(0, Math.min(20, value));
+            input.value = value;
+        }
+        
+        function applyMasterControl() {
+            const masterSpeed = parseFloat(document.getElementById('master-speed').value);
+            const masterCable = parseFloat(document.getElementById('master-cable').value);
+            
+            // Apply to Motor 1 (Tether Reel)
+            document.getElementById('motor1-speed').value = masterSpeed;
+            document.getElementById('motor1-speed-value').textContent = masterSpeed.toFixed(2);
+            document.getElementById('motor1-cable').value = masterCable;
+            updateMotor('motor1');
+            
+            // Apply to Motor 2 (Launcher Reel)
+            document.getElementById('motor2-speed').value = masterSpeed;
+            document.getElementById('motor2-speed-value').textContent = masterSpeed.toFixed(2);
+            document.getElementById('motor2-cable').value = masterCable;
+            updateMotor('motor2');
+        }
+        
+        async function updateMotor(motorId) {
+            const desiredSpeed = parseFloat(document.getElementById(motorId + '-speed').value);
+            const desiredLength = parseFloat(document.getElementById(motorId + '-cable').value);
+            
+            try {
+                const response = await fetch(`${API_BASE}/motor/${motorId}/set`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        desired_speed: desiredSpeed, 
+                        desired_length: desiredLength 
+                    })
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        // Direct PWM Control
+        function toggleDirectPWM(motorId) {
+            const enable = document.getElementById(motorId + '-direct-enable').checked;
+            const slider = document.getElementById(motorId + '-direct-pwm');
+            slider.disabled = !enable;
+            
+            if (!enable) {
+                // Disable direct mode - set to -1
+                fetch(`${API_BASE}/motor/${motorId}/direct_pwm?pwm_value=-1`, { method: 'POST' });
+            } else {
+                // Enable direct mode - get current slider value
+                const pwmValue = parseInt(slider.value);
+                setDirectPWM(motorId, pwmValue);
+            }
+        }
+        
+        function setDirectPWM(motorId, pwmValue) {
+            document.getElementById(motorId + '-direct-pwm-value').textContent = pwmValue;
+            fetch(`${API_BASE}/motor/${motorId}/direct_pwm?pwm_value=${pwmValue}`, { method: 'POST' });
+        }
+        
+        // Initialize direct PWM sliders
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add event listeners for direct PWM sliders
+            document.getElementById('motor1-direct-pwm').addEventListener('input', (e) => {
+                if (document.getElementById('motor1-direct-enable').checked) {
+                    setDirectPWM('motor1', parseInt(e.target.value));
+                }
+            });
+            
+            document.getElementById('motor2-direct-pwm').addEventListener('input', (e) => {
+                if (document.getElementById('motor2-direct-enable').checked) {
+                    setDirectPWM('motor2', parseInt(e.target.value));
+                }
+            });
+        });
+        
+        async function fetchStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/motors/status`);
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update Motor 1
+                    if (data.motor1) {
+                        const m1 = data.motor1;
+                        document.getElementById('motor1-current-speed').textContent = (m1.encoder_speed || 0).toFixed(2);
+                        document.getElementById('motor1-current-length').textContent = (m1.encoder_length || 0).toFixed(2);
+                        const m1PwmVal = m1.pwm_value || 1000;
+                        const m1PwmPct = Math.round(((m1PwmVal - 700) / 600) * 100);
+                        document.getElementById('motor1-pwm').textContent = m1PwmVal;
+                        document.getElementById('motor1-pwm-fill').style.width = m1PwmPct + '%';
+                        
+                        // Update mode badge
+                        const m1DesiredLen = parseFloat(document.getElementById('motor1-cable').value);
+                        document.getElementById('motor1-mode').textContent = m1DesiredLen > 0 ? 'LENGTH' : 'SPEED';
+                        
+                        // Update direction indicator
+                        const m1Dir = m1.encoder_direction || 'STOPPED';
+                        const m1DirEl = document.getElementById('motor1-direction');
+                        m1DirEl.textContent = m1Dir;
+                        if(m1Dir === 'ROLL OUT') { m1DirEl.style.background = '#3fb950'; m1DirEl.style.color = '#fff'; }
+                        else if(m1Dir === 'ROLL IN') { m1DirEl.style.background = '#f85149'; m1DirEl.style.color = '#fff'; }
+                        else { m1DirEl.style.background = '#30363d'; m1DirEl.style.color = '#8b949e'; }
+                    }
+                    
+                    // Update Motor 2
+                    if (data.motor2) {
+                        const m2 = data.motor2;
+                        document.getElementById('motor2-current-speed').textContent = (m2.encoder_speed || 0).toFixed(2);
+                        document.getElementById('motor2-current-length').textContent = (m2.encoder_length || 0).toFixed(2);
+                        const m2PwmVal = m2.pwm_value || 1000;
+                        const m2PwmPct = Math.round(((m2PwmVal - 700) / 600) * 100);
+                        document.getElementById('motor2-pwm').textContent = m2PwmVal;
+                        document.getElementById('motor2-pwm-fill').style.width = m2PwmPct + '%';
+                        
+                        // Update mode badge
+                        const m2DesiredLen = parseFloat(document.getElementById('motor2-cable').value);
+                        document.getElementById('motor2-mode').textContent = m2DesiredLen > 0 ? 'LENGTH' : 'SPEED';
+                        
+                        // Update direction indicator
+                        const m2Dir = m2.encoder_direction || 'STOPPED';
+                        const m2DirEl = document.getElementById('motor2-direction');
+                        m2DirEl.textContent = m2Dir;
+                        if(m2Dir === 'ROLL OUT') { m2DirEl.style.background = '#3fb950'; m2DirEl.style.color = '#fff'; }
+                        else if(m2Dir === 'ROLL IN') { m2DirEl.style.background = '#f85149'; m2DirEl.style.color = '#fff'; }
+                        else { m2DirEl.style.background = '#30363d'; m2DirEl.style.color = '#8b949e'; }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching status:', error);
+            }
+        }
+    </script>
+</body>
+</html>

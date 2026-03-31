@@ -59,6 +59,8 @@ class EncoderReader:
         
         # Encoder states: address -> {raw, total_m, speed, direction, laps}
         self.encoders = {}
+        # Per-address direction inversion: address -> bool
+        self.invert = {}
         self.running = False
         self.thread = None
         self.lock = threading.Lock()
@@ -158,15 +160,19 @@ class EncoderReader:
                         if abs(delta) <= DEADBAND_PULSES:
                             delta = 0
                             
+                        # Apply direction inversion if configured
+                        if self.invert.get(address, False):
+                            delta = -delta
+
                         cable_delta_m = (delta / self.encoder_resolution) * self.drum_circumference
-                        
+
                         enc = self.encoders[address]
                         enc["total_m"] += cable_delta_m
                         enc["speed_ms"] = abs(cable_delta_m) / dt if dt > 0 else 0
                         enc["raw"] = raw
                         enc["laps"] = laps
                         enc["timestamp"] = now
-                        
+
                         if delta > DEADBAND_PULSES:
                             enc["direction"] = "ROLL OUT"
                         elif delta < -DEADBAND_PULSES:

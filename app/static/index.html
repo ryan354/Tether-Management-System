@@ -256,7 +256,92 @@
         .motor2-card .feedback-box .value {
             color: #3fb950;
         }
-        
+
+        /* Fold Mechanism Card */
+        .fold-card {
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            width: 520px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            margin: 30px auto 0 auto;
+        }
+        .fold-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            color: #f0883e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .fold-status-badge {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .fold-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .fold-btn.unfold {
+            background: linear-gradient(135deg, #f0883e, #d2691e);
+            box-shadow: 0 4px 15px rgba(240, 136, 62, 0.4);
+        }
+        .fold-btn.unfold:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 6px 25px rgba(240, 136, 62, 0.6);
+        }
+        .fold-btn.fold {
+            background: linear-gradient(135deg, #8b6914, #6b4f10);
+            box-shadow: 0 4px 15px rgba(139, 105, 20, 0.4);
+        }
+        .fold-btn.fold:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 6px 25px rgba(139, 105, 20, 0.6);
+        }
+        .fold-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .fold-switch-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+        .switch-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .switch-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #30363d;
+            transition: background 0.3s;
+        }
+        .switch-dot.active {
+            background: #f0883e;
+            box-shadow: 0 0 10px rgba(240, 136, 62, 0.6);
+        }
+
         /* PWM Output */
         .pwm-bar {
             margin-top: 15px;
@@ -555,6 +640,10 @@
 <div style="margin-bottom:10px"><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Launcher (Address 2):</label><input type="number" id="config-launcher-addr" min="1" max="247" value="2" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
 <div style="margin-bottom:10px"><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Encoder PPR (pulses/rev):</label><input type="number" id="config-resolution" min="1" value="4096" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
 <div><label style="display:block;margin-bottom:3px;font-size:12px;color:#8b949e">Wheel Diameter (m):</label><input type="number" id="config-drum-circ" min="0.01" step="0.01" value="0.2" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="margin-top:10px;display:flex;gap:20px">
+<label style="font-size:12px;color:#8b949e;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="config-tether-invert" style="accent-color:#f85149"> Invert Tether (Roll In/Out)</label>
+<label style="font-size:12px;color:#8b949e;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="config-launcher-invert" style="accent-color:#3fb950"> Invert Launcher (Roll In/Out)</label>
+</div>
 </div>
 
 <div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
@@ -780,9 +869,50 @@
         </div>
     </div>
 
+    <!-- Fold Mechanism -->
+    <div class="fold-card">
+        <h2>USBL Mount
+            <span class="fold-status-badge" id="fold-state-badge"
+                  style="background:rgba(139,148,158,0.2);color:#8b949e">UNKNOWN</span>
+        </h2>
+
+        <div class="control-section">
+            <h3 style="color:#f0883e;">Fold / Unfold Control</h3>
+            <button class="fold-btn unfold" id="fold-toggle-btn" onclick="toggleFold()">
+                UNFOLD
+            </button>
+
+            <div style="text-align:center;margin-top:10px">
+                <button onclick="stopFold()"
+                        style="padding:8px 24px;border-radius:8px;border:none;
+                               font-size:0.85rem;cursor:pointer;
+                               background:#f85149;color:#fff">
+                    STOP
+                </button>
+            </div>
+        </div>
+
+        <div class="fold-switch-indicators">
+            <div class="switch-indicator">
+                <span class="switch-dot" id="fold-switch-dot"></span>
+                Fold Limit
+            </div>
+            <div class="switch-indicator">
+                <span class="switch-dot" id="unfold-switch-dot"></span>
+                Unfold Limit
+            </div>
+        </div>
+
+        <div class="pwm-bar" style="margin-top:15px">
+            <div class="pwm-fill" id="fold-pwm-fill"
+                 style="width:50%;background:linear-gradient(90deg,#f0883e,#ffb347)"></div>
+            <span class="pwm-text">PWM: <span id="fold-pwm">1000</span></span>
+        </div>
+    </div>
+
     <script>
         const API_BASE = '/v1.0';
-        
+
         // Track stopped state per motor
         const motorStopped = { motor1: false, motor2: false };
         // Store last setpoints so we can resume after stop
@@ -831,6 +961,8 @@ async function loadConfig() {
                 document.getElementById('config-launcher-addr').value = c.launcher_encoder_address || 2;
                 document.getElementById('config-resolution').value = c.encoder_resolution || 4096;
                 document.getElementById('config-drum-circ').value = c.drum_circumference || 0.2;
+                document.getElementById('config-tether-invert').checked = c.tether_invert || false;
+                document.getElementById('config-launcher-invert').checked = c.launcher_invert || false;
                 const tc = c.tether_ctrl || {};
                 document.getElementById('config-tether-ff-gain').value = tc.ff_gain || 75;
                 document.getElementById('config-tether-kp').value = tc.kp || 12;
@@ -852,6 +984,8 @@ async function saveSettings() {
                     launcher_encoder_address: parseInt(document.getElementById('config-launcher-addr').value),
                     encoder_resolution: parseInt(document.getElementById('config-resolution').value),
                     drum_circumference: parseFloat(document.getElementById('config-drum-circ').value),
+                    tether_invert: document.getElementById('config-tether-invert').checked,
+                    launcher_invert: document.getElementById('config-launcher-invert').checked,
                     tether_ctrl: { 
                         ff_gain: parseFloat(document.getElementById('config-tether-ff-gain').value || 75),
                         kp: parseFloat(document.getElementById('config-tether-kp').value || 12),
@@ -1064,10 +1198,110 @@ async function saveSettings() {
                         else if(m2Dir === 'ROLL IN') { m2DirEl.style.background = '#f85149'; m2DirEl.style.color = '#fff'; }
                         else { m2DirEl.style.background = '#30363d'; m2DirEl.style.color = '#8b949e'; }
                     }
+
+                    // Update Fold Mechanism
+                    if (data.fold) {
+                        updateFoldUI(data.fold);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching status:', error);
             }
+        }
+
+        // ---- Fold Mechanism Controls ----
+
+        async function toggleFold() {
+            const btn = document.getElementById('fold-toggle-btn');
+            const currentState = btn.dataset.foldState || 'unknown';
+
+            let endpoint;
+            if (currentState === 'folded') {
+                endpoint = '/fold/unfold';
+            } else if (currentState === 'unfolded') {
+                endpoint = '/fold/fold';
+            } else {
+                // unknown or other -> default to unfold
+                endpoint = '/fold/unfold';
+            }
+
+            try {
+                btn.disabled = true;
+                await fetch(API_BASE + endpoint, { method: 'POST' });
+            } catch (e) {
+                console.error('Fold error:', e);
+            }
+        }
+
+        async function stopFold() {
+            try {
+                await fetch(API_BASE + '/fold/stop', { method: 'POST' });
+            } catch (e) {
+                console.error('Fold stop error:', e);
+            }
+        }
+
+        function updateFoldUI(foldData) {
+            if (!foldData) return;
+
+            const state = foldData.state;
+            const btn = document.getElementById('fold-toggle-btn');
+            const badge = document.getElementById('fold-state-badge');
+            const foldDot = document.getElementById('fold-switch-dot');
+            const unfoldDot = document.getElementById('unfold-switch-dot');
+            const pwmSpan = document.getElementById('fold-pwm');
+            const pwmFill = document.getElementById('fold-pwm-fill');
+
+            btn.dataset.foldState = state;
+
+            switch (state) {
+                case 'folded':
+                    badge.textContent = 'FOLDED';
+                    badge.style.background = 'rgba(139,105,20,0.3)';
+                    badge.style.color = '#d2a832';
+                    btn.textContent = 'UNFOLD';
+                    btn.className = 'fold-btn unfold';
+                    btn.disabled = false;
+                    break;
+                case 'unfolded':
+                    badge.textContent = 'UNFOLDED';
+                    badge.style.background = 'rgba(240,136,62,0.3)';
+                    badge.style.color = '#f0883e';
+                    btn.textContent = 'FOLD';
+                    btn.className = 'fold-btn fold';
+                    btn.disabled = false;
+                    break;
+                case 'folding':
+                    badge.textContent = 'FOLDING...';
+                    badge.style.background = 'rgba(139,105,20,0.3)';
+                    badge.style.color = '#d2a832';
+                    btn.textContent = 'FOLDING...';
+                    btn.disabled = true;
+                    break;
+                case 'unfolding':
+                    badge.textContent = 'UNFOLDING...';
+                    badge.style.background = 'rgba(240,136,62,0.3)';
+                    badge.style.color = '#f0883e';
+                    btn.textContent = 'UNFOLDING...';
+                    btn.disabled = true;
+                    break;
+                default:
+                    badge.textContent = 'UNKNOWN';
+                    badge.style.background = 'rgba(139,148,158,0.2)';
+                    badge.style.color = '#8b949e';
+                    btn.textContent = 'UNFOLD';
+                    btn.className = 'fold-btn unfold';
+                    btn.disabled = false;
+                    break;
+            }
+
+            foldDot.className = 'switch-dot' + (foldData.fold_switch ? ' active' : '');
+            unfoldDot.className = 'switch-dot' + (foldData.unfold_switch ? ' active' : '');
+
+            const pwmVal = foldData.pwm_value || 1000;
+            pwmSpan.textContent = pwmVal;
+            const pwmPct = Math.round(((pwmVal - 700) / 600) * 100);
+            pwmFill.style.width = pwmPct + '%';
         }
     </script>
 </body>

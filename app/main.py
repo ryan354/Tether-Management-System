@@ -28,7 +28,9 @@ DEFAULT_CONFIG = {
     "launcher_ctrl": {"ff_gain": 150.0, "kp": 15.0, "accel_rate": 0.05, "decel_rate": 0.05, "position_gain": 2.0},
     "pwm_middle": 1000,
     "pwm_max_cw": 700,
-    "pwm_min_ccw": 1300
+    "pwm_min_ccw": 1300,
+    "tether_invert": False,
+    "launcher_invert": False
 }
 
 # Load config
@@ -92,6 +94,13 @@ try:
     GPIO.output(26, GPIO.LOW)  # LOW = outputs enabled
     logger.info("PCA9685 OE pin (GPIO 26) driven LOW - outputs enabled")
 
+    # --- Limit switch GPIO pins for fold mechanism ---
+    FOLD_LIMIT_PIN = 27    # GPIO 27 (Navigator leak header) - fold limit switch
+    UNFOLD_LIMIT_PIN = 18  # GPIO 18 (Navigator PWM0 header) - unfold limit switch
+    GPIO.setup(FOLD_LIMIT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(UNFOLD_LIMIT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    logger.info(f"Limit switch GPIOs configured: fold={FOLD_LIMIT_PIN}, unfold={UNFOLD_LIMIT_PIN}")
+
     # --- Init PCA9685 with external 24.576 MHz clock ---
     # Step 1: Sleep mode
     bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x10)
@@ -138,6 +147,8 @@ try:
 
 except Exception as e:
     NAVIGATOR_AVAILABLE = False
+    FOLD_LIMIT_PIN = 27
+    UNFOLD_LIMIT_PIN = 18
     logger.warning(f"I2C PWM not available: {e} - running in simulation mode")
     def set_pwm(channel, value):
         pass
@@ -147,6 +158,7 @@ except Exception as e:
 PWM_CHANNELS = {
     "motor1": 14,  # Navigator Ch15 → PCA9685 channel 14
     "motor2": 15,  # Navigator Ch16 → PCA9685 channel 15
+    "motor3": 13,  # Navigator Ch14 → PCA9685 channel 13 (fold mechanism)
 }
 
 
@@ -193,6 +205,9 @@ class Motor:
         # Direct PWM override (None = use controller)
         self.direct_pwm = None
 
+        # Direction inversion (swaps CW/CCW when True)
+        self.invert_direction = False
+
         # ── Trapezoidal + FF+P controller parameters ──────────────────────
         # ff_gain      : open-loop PWM per m/s. Tune first (run open-loop,
         #                measure speed). e.g. output=100 → 0.5 m/s → gain=200.
@@ -215,6 +230,12 @@ class Motor:
 
         self.last_update = time.time()
     
+    def _invert_pwm(self, rc_pwm):
+        """Invert PWM around neutral (1000). 850->1150, 1150->850, etc."""
+        if self.invert_direction:
+            return PWM_MIDDLE + (PWM_MIDDLE - rc_pwm)
+        return rc_pwm
+
     def _ramp(self, current: float, target: float) -> float:
         """Step current toward target by at most accel/decel_rate per cycle."""
         if current < target:
@@ -297,7 +318,7 @@ class Motor:
 
         # Direct PWM override
         if self.direct_pwm is not None:
-            rc_pwm        = self.direct_pwm
+            rc_pwm        = self._invert_pwm(self.direct_pwm)
             pca9685_value = int(rc_pwm / 4000 * 4095)
             if NAVIGATOR_AVAILABLE:
                 try:
@@ -316,7 +337,7 @@ class Motor:
             }
 
         # Trapezoidal + FF+P
-        rc_pwm        = self._compute_rc_pwm()
+        rc_pwm        = self._invert_pwm(self._compute_rc_pwm())
         pca9685_value = int(rc_pwm / 4000 * 4095)
 
         if NAVIGATOR_AVAILABLE:
@@ -373,19 +394,175 @@ class Motor:
         logger.info(f"{self.name}: stopped")
 
 
+class FoldMotor:
+    """Simple motor controller for fold/unfold mechanism with limit switches."""
+
+    PWM_FOLD = 1150    # CCW at 50% -> fold
+    PWM_UNFOLD = 850   # CW at 50% -> unfold
+    SAFETY_TIMEOUT = 30  # seconds max travel time
+
+    def __init__(self, pwm_channel, fold_pin, unfold_pin):
+        self.pwm_channel = pwm_channel
+        self.fold_pin = fold_pin
+        self.unfold_pin = unfold_pin
+        self.state = "unknown"  # folded, unfolded, folding, unfolding, unknown
+        self.current_pwm = PWM_MIDDLE
+        self._motion_start_time = 0.0
+
+        # Read initial switch states
+        if NAVIGATOR_AVAILABLE:
+            if GPIO.input(self.fold_pin):
+                self.state = "folded"
+            elif GPIO.input(self.unfold_pin):
+                self.state = "unfolded"
+
+            # Try interrupt-based detection, fall back to polling
+            self._use_interrupts = False
+            try:
+                GPIO.add_event_detect(self.fold_pin, GPIO.RISING,
+                                      callback=self._on_fold_limit, bouncetime=50)
+                GPIO.add_event_detect(self.unfold_pin, GPIO.RISING,
+                                      callback=self._on_unfold_limit, bouncetime=50)
+                self._use_interrupts = True
+                logger.info("FoldMotor: using GPIO interrupt detection")
+            except RuntimeError:
+                logger.warning("FoldMotor: GPIO edge detection failed, using polling mode")
+
+        logger.info(f"FoldMotor initialized: channel={pwm_channel}, state={self.state}")
+
+    def _stop_motor(self):
+        self.current_pwm = PWM_MIDDLE
+        pca9685_value = int(PWM_MIDDLE / 4000 * 4095)
+        if NAVIGATOR_AVAILABLE:
+            try:
+                set_pwm(self.pwm_channel, pca9685_value)
+            except Exception as e:
+                logger.error(f"FoldMotor: failed to stop: {e}")
+
+    def _on_fold_limit(self, channel):
+        if self.state == "folding":
+            self._stop_motor()
+            self.state = "folded"
+            logger.info("FoldMotor: fold limit reached - motor stopped")
+
+    def _on_unfold_limit(self, channel):
+        if self.state == "unfolding":
+            self._stop_motor()
+            self.state = "unfolded"
+            logger.info("FoldMotor: unfold limit reached - motor stopped")
+
+    def fold(self):
+        if self.state == "folded":
+            return "already_folded"
+        if self.state in ("folding", "unfolding"):
+            return "already_in_progress"
+        if NAVIGATOR_AVAILABLE and GPIO.input(self.fold_pin):
+            self.state = "folded"
+            return "already_folded"
+
+        self.state = "folding"
+        self.current_pwm = self.PWM_FOLD
+        self._motion_start_time = time.time()
+        pca9685_value = int(self.PWM_FOLD / 4000 * 4095)
+        if NAVIGATOR_AVAILABLE:
+            try:
+                set_pwm(self.pwm_channel, pca9685_value)
+            except Exception as e:
+                logger.error(f"FoldMotor: failed to start fold: {e}")
+                return "error"
+        logger.info(f"FoldMotor: folding at PWM {self.PWM_FOLD}")
+        return "folding"
+
+    def unfold(self):
+        if self.state == "unfolded":
+            return "already_unfolded"
+        if self.state in ("folding", "unfolding"):
+            return "already_in_progress"
+        if NAVIGATOR_AVAILABLE and GPIO.input(self.unfold_pin):
+            self.state = "unfolded"
+            return "already_unfolded"
+
+        self.state = "unfolding"
+        self.current_pwm = self.PWM_UNFOLD
+        self._motion_start_time = time.time()
+        pca9685_value = int(self.PWM_UNFOLD / 4000 * 4095)
+        if NAVIGATOR_AVAILABLE:
+            try:
+                set_pwm(self.pwm_channel, pca9685_value)
+            except Exception as e:
+                logger.error(f"FoldMotor: failed to start unfold: {e}")
+                return "error"
+        logger.info(f"FoldMotor: unfolding at PWM {self.PWM_UNFOLD}")
+        return "unfolding"
+
+    def stop(self):
+        self._stop_motor()
+        if self.state in ("folding", "unfolding"):
+            self.state = "unknown"
+        logger.info("FoldMotor: emergency stop")
+
+    def check_safety_timeout(self):
+        if self.state in ("folding", "unfolding"):
+            if time.time() - self._motion_start_time > self.SAFETY_TIMEOUT:
+                self._stop_motor()
+                self.state = "unknown"
+                logger.warning("FoldMotor: safety timeout - stopped after 30s")
+
+    def get_status(self):
+        self.check_safety_timeout()
+        fold_sw = GPIO.input(self.fold_pin) if NAVIGATOR_AVAILABLE else False
+        unfold_sw = GPIO.input(self.unfold_pin) if NAVIGATOR_AVAILABLE else False
+
+        # Poll-based limit switch detection (fallback when interrupts unavailable)
+        if NAVIGATOR_AVAILABLE and not getattr(self, '_use_interrupts', False):
+            if fold_sw and self.state == "folding":
+                self._stop_motor()
+                self.state = "folded"
+                logger.info("FoldMotor: fold limit reached (polled) - motor stopped")
+            elif unfold_sw and self.state == "unfolding":
+                self._stop_motor()
+                self.state = "unfolded"
+                logger.info("FoldMotor: unfold limit reached (polled) - motor stopped")
+
+        return {
+            "state": self.state,
+            "pwm_value": self.current_pwm,
+            "fold_switch": bool(fold_sw),
+            "unfold_switch": bool(unfold_sw),
+        }
+
+
 SERVICE_NAME = "MotorControlExtension"
 
 app = FastAPI(
     title="Motor Control API",
-    description="API for controlling 2 motors with PID control and cable encoder feedback",
+    description="API for controlling motors with PID control and cable encoder feedback",
 )
 
 # Initialize motors with Navigator PWM channels
-# Ch15 = motor1, Ch16 = motor2
 motors = {
     "motor1": Motor("motor1"),
     "motor2": Motor("motor2"),
 }
+
+# Apply direction inversion from config
+motors["motor1"].invert_direction = CONFIG.get("tether_invert", False)
+motors["motor2"].invert_direction = CONFIG.get("launcher_invert", False)
+
+def _apply_encoder_invert():
+    """Sync encoder invert flags from config."""
+    if encoder_reader:
+        tether_addr = CONFIG.get("tether_encoder_address", 1)
+        launcher_addr = CONFIG.get("launcher_encoder_address", 2)
+        encoder_reader.invert[tether_addr] = CONFIG.get("tether_invert", False)
+        encoder_reader.invert[launcher_addr] = CONFIG.get("launcher_invert", False)
+
+# Fold mechanism motor
+fold_motor = FoldMotor(
+    pwm_channel=PWM_CHANNELS["motor3"],
+    fold_pin=FOLD_LIMIT_PIN,
+    unfold_pin=UNFOLD_LIMIT_PIN,
+)
 
 logger.info(f"Starting {SERVICE_NAME}!")
 if NAVIGATOR_AVAILABLE:
@@ -533,7 +710,7 @@ async def get_all_motors_status() -> Any:
         enc_length = enc.get("total_m", 0)
         enc_speed = enc.get("speed_ms", 0)
         enc_direction = enc.get("direction", "STOPPED")
-        
+
         # Feed encoder data into controller ONLY if NOT paused
         if not motor.paused:
             # Feed encoder data into PID and run control loop
@@ -557,6 +734,8 @@ async def get_all_motors_status() -> Any:
             "encoder_direction": enc_direction,
             "paused": motor.paused,  # Add paused status for UI
         }
+    # Add fold mechanism status
+    result["fold"] = fold_motor.get_status()
     return result
 
 @app.get("/info")
@@ -582,6 +761,9 @@ async def get_config() -> Any:
 async def set_config(config: dict) -> Any:
     """Save configuration"""
     global CONFIG, encoder_reader
+    # Track invert changes to reset encoders
+    old_tether_inv = CONFIG.get("tether_invert", False)
+    old_launcher_inv = CONFIG.get("launcher_invert", False)
     CONFIG.update(config)
     save_config(CONFIG)
     
@@ -614,7 +796,20 @@ async def set_config(config: dict) -> Any:
             "decel_rate": cfg.get("decel_rate", cfg.get("decel", 0.05)),
         }
         motor.set_controller_config(ControllerConfig(**normalized))
-    
+
+    # Apply direction inversion
+    motors["motor1"].invert_direction = CONFIG.get("tether_invert", False)
+    motors["motor2"].invert_direction = CONFIG.get("launcher_invert", False)
+    _apply_encoder_invert()
+    # Reset encoder counters if invert changed
+    if encoder_reader:
+        if CONFIG.get("tether_invert", False) != old_tether_inv:
+            encoder_reader.reset_counter(CONFIG.get("tether_encoder_address", 1))
+            logger.info("Tether encoder reset due to invert change")
+        if CONFIG.get("launcher_invert", False) != old_launcher_inv:
+            encoder_reader.reset_counter(CONFIG.get("launcher_encoder_address", 2))
+            logger.info("Launcher encoder reset due to invert change")
+
     logger.info("Config updated and encoder restarted")
     return {"status": "ok", "config": CONFIG}
 
@@ -654,6 +849,35 @@ async def list_serial_ports() -> Any:
         ports.extend(glob.glob(pattern))
     return {"ports": sorted(ports)}
 
+# ---- Fold Mechanism API ------------------------------------------------
+
+@app.post("/fold/fold", status_code=status.HTTP_200_OK)
+@version(1, 0)
+async def fold_mount() -> Any:
+    """Fold the USBL mount."""
+    result = fold_motor.fold()
+    return {"status": result, "state": fold_motor.state}
+
+@app.post("/fold/unfold", status_code=status.HTTP_200_OK)
+@version(1, 0)
+async def unfold_mount() -> Any:
+    """Unfold the USBL mount."""
+    result = fold_motor.unfold()
+    return {"status": result, "state": fold_motor.state}
+
+@app.post("/fold/stop", status_code=status.HTTP_200_OK)
+@version(1, 0)
+async def stop_fold() -> Any:
+    """Emergency stop the fold motor."""
+    fold_motor.stop()
+    return {"status": "stopped", "state": fold_motor.state}
+
+@app.get("/fold/status", status_code=status.HTTP_200_OK)
+@version(1, 0)
+async def get_fold_status() -> Any:
+    """Get fold mechanism status."""
+    return fold_motor.get_status()
+
 app = VersionedFastAPI(app, version="1.0.0", prefix_format="/v{major}.{minor}", enable_latest=True)
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
@@ -673,6 +897,7 @@ async def startup_event():
         "drum_circumference": CONFIG.get("drum_circumference", 0.2)
     })
     encoder_reader.start()
+    _apply_encoder_invert()
     logger.info("Encoder reader initialized on startup")
 
 if __name__ == "__main__":

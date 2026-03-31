@@ -13,7 +13,7 @@ import json
 import os
 
 # Config file path
-CONFIG_FILE = "/home/pi/motor-control/app/config.json"
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 # Default config
 DEFAULT_CONFIG = {
@@ -30,18 +30,33 @@ DEFAULT_CONFIG = {
     "pwm_max_cw": 700,
     "pwm_min_ccw": 1300,
     "tether_invert": False,
-    "launcher_invert": False
+    "launcher_invert": False,
+    # Fold motor (Basic ESC T200): 1100-1500-1900, ±25 deadband
+    "fold_ctrl": {
+        "pwm_middle": 1500,
+        "pwm_max_cw": 1100,
+        "pwm_min_ccw": 1900,
+        "fold_speed_pct": 10,
+        "unfold_speed_pct": 10
+    }
 }
 
-# Load config
+# Load config (merge saved values over defaults so new fields are always present)
 def load_config():
+    import copy
+    config = copy.deepcopy(DEFAULT_CONFIG)
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE) as f:
-                return json.load(f)
+                saved = json.load(f)
+            for k, v in saved.items():
+                if isinstance(v, dict) and isinstance(config.get(k), dict):
+                    config[k].update(v)
+                else:
+                    config[k] = v
         except (json.JSONDecodeError, OSError) as e:
             logger.warning(f"Failed to load config, using defaults: {e}")
-    return DEFAULT_CONFIG.copy()
+    return config
 
 def save_config(config):
     try:
@@ -95,8 +110,8 @@ try:
     logger.info("PCA9685 OE pin (GPIO 26) driven LOW - outputs enabled")
 
     # --- Limit switch GPIO pins for fold mechanism ---
-    FOLD_LIMIT_PIN = 27    # GPIO 27 (Navigator leak header) - fold limit switch
-    UNFOLD_LIMIT_PIN = 18  # GPIO 18 (Navigator PWM0 header) - unfold limit switch
+    FOLD_LIMIT_PIN = 18    # GPIO 18 (Navigator PWM0 header) - fold limit switch
+    UNFOLD_LIMIT_PIN = 27  # GPIO 27 (Navigator leak header) - unfold limit switch
     GPIO.setup(FOLD_LIMIT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.setup(UNFOLD_LIMIT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     logger.info(f"Limit switch GPIOs configured: fold={FOLD_LIMIT_PIN}, unfold={UNFOLD_LIMIT_PIN}")
@@ -116,6 +131,14 @@ try:
     # Step 4: Wake up with external clock + auto-increment
     bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x60)  # EXTCLK(0x40) + AI(0x20)
     time.sleep(0.005)
+
+    # Set Navigator Ch1 (PCA9685 channel 0) to constant 3.3V output
+    ch1_reg = PCA9685_LED0_ON_L + (0 * 4)
+    bus.write_byte_data(PCA9685_ADDR, ch1_reg, 0)       # ON_L
+    bus.write_byte_data(PCA9685_ADDR, ch1_reg + 1, 0x10) # ON_H bit4 = full ON
+    bus.write_byte_data(PCA9685_ADDR, ch1_reg + 2, 0)    # OFF_L
+    bus.write_byte_data(PCA9685_ADDR, ch1_reg + 3, 0)    # OFF_H
+    logger.info("Navigator Ch1 set to constant 3.3V output")
 
     NAVIGATOR_AVAILABLE = True
     logger.info(f"PCA9685 PWM initialized at {PWM_FREQ} Hz (ext 24.576 MHz clock, prescale={prescale})")
@@ -147,8 +170,8 @@ try:
 
 except Exception as e:
     NAVIGATOR_AVAILABLE = False
-    FOLD_LIMIT_PIN = 27
-    UNFOLD_LIMIT_PIN = 18
+    FOLD_LIMIT_PIN = 18
+    UNFOLD_LIMIT_PIN = 27
     logger.warning(f"I2C PWM not available: {e} - running in simulation mode")
     def set_pwm(channel, value):
         pass
@@ -397,8 +420,6 @@ class Motor:
 class FoldMotor:
     """Simple motor controller for fold/unfold mechanism with limit switches."""
 
-    PWM_FOLD = 1150    # CCW at 50% -> fold
-    PWM_UNFOLD = 850   # CW at 50% -> unfold
     SAFETY_TIMEOUT = 30  # seconds max travel time
 
     def __init__(self, pwm_channel, fold_pin, unfold_pin):
@@ -406,8 +427,20 @@ class FoldMotor:
         self.fold_pin = fold_pin
         self.unfold_pin = unfold_pin
         self.state = "unknown"  # folded, unfolded, folding, unfolding, unknown
-        self.current_pwm = PWM_MIDDLE
         self._motion_start_time = 0.0
+
+        # Load PWM config from CONFIG (Basic ESC T200 defaults)
+        self._load_config()
+        self.current_pwm = self.pwm_middle
+
+        # Send neutral PWM to arm the ESC
+        if NAVIGATOR_AVAILABLE:
+            pca9685_value = int(self.pwm_middle / 4000 * 4095)
+            try:
+                set_pwm(self.pwm_channel, pca9685_value)
+                logger.info(f"FoldMotor: ESC arming signal sent (PWM {self.pwm_middle})")
+            except Exception as e:
+                logger.error(f"FoldMotor: failed to send arming signal: {e}")
 
         # Read initial switch states
         if NAVIGATOR_AVAILABLE:
@@ -428,11 +461,25 @@ class FoldMotor:
             except RuntimeError:
                 logger.warning("FoldMotor: GPIO edge detection failed, using polling mode")
 
-        logger.info(f"FoldMotor initialized: channel={pwm_channel}, state={self.state}")
+        logger.info(f"FoldMotor initialized: channel={pwm_channel}, state={self.state}, "
+                    f"middle={self.pwm_middle}, fold={self.pwm_fold}, unfold={self.pwm_unfold}")
+
+    def _load_config(self):
+        """Load fold motor PWM settings from CONFIG."""
+        fc = CONFIG.get("fold_ctrl", {})
+        self.pwm_middle = fc.get("pwm_middle", 1500)
+        self.pwm_max_cw = fc.get("pwm_max_cw", 1100)
+        self.pwm_min_ccw = fc.get("pwm_min_ccw", 1900)
+        fold_pct = fc.get("fold_speed_pct", 50) / 100.0
+        unfold_pct = fc.get("unfold_speed_pct", 50) / 100.0
+        # Fold = CCW direction (middle toward min_ccw)
+        self.pwm_fold = int(self.pwm_middle + (self.pwm_min_ccw - self.pwm_middle) * fold_pct)
+        # Unfold = CW direction (middle toward max_cw)
+        self.pwm_unfold = int(self.pwm_middle + (self.pwm_max_cw - self.pwm_middle) * unfold_pct)
 
     def _stop_motor(self):
-        self.current_pwm = PWM_MIDDLE
-        pca9685_value = int(PWM_MIDDLE / 4000 * 4095)
+        self.current_pwm = self.pwm_middle
+        pca9685_value = int(self.pwm_middle / 4000 * 4095)
         if NAVIGATOR_AVAILABLE:
             try:
                 set_pwm(self.pwm_channel, pca9685_value)
@@ -461,16 +508,16 @@ class FoldMotor:
             return "already_folded"
 
         self.state = "folding"
-        self.current_pwm = self.PWM_FOLD
+        self.current_pwm = self.pwm_fold
         self._motion_start_time = time.time()
-        pca9685_value = int(self.PWM_FOLD / 4000 * 4095)
+        pca9685_value = int(self.pwm_fold / 4000 * 4095)
         if NAVIGATOR_AVAILABLE:
             try:
                 set_pwm(self.pwm_channel, pca9685_value)
             except Exception as e:
                 logger.error(f"FoldMotor: failed to start fold: {e}")
                 return "error"
-        logger.info(f"FoldMotor: folding at PWM {self.PWM_FOLD}")
+        logger.info(f"FoldMotor: folding at PWM {self.pwm_fold}")
         return "folding"
 
     def unfold(self):
@@ -483,16 +530,16 @@ class FoldMotor:
             return "already_unfolded"
 
         self.state = "unfolding"
-        self.current_pwm = self.PWM_UNFOLD
+        self.current_pwm = self.pwm_unfold
         self._motion_start_time = time.time()
-        pca9685_value = int(self.PWM_UNFOLD / 4000 * 4095)
+        pca9685_value = int(self.pwm_unfold / 4000 * 4095)
         if NAVIGATOR_AVAILABLE:
             try:
                 set_pwm(self.pwm_channel, pca9685_value)
             except Exception as e:
                 logger.error(f"FoldMotor: failed to start unfold: {e}")
                 return "error"
-        logger.info(f"FoldMotor: unfolding at PWM {self.PWM_UNFOLD}")
+        logger.info(f"FoldMotor: unfolding at PWM {self.pwm_unfold}")
         return "unfolding"
 
     def stop(self):
@@ -513,13 +560,13 @@ class FoldMotor:
         fold_sw = GPIO.input(self.fold_pin) if NAVIGATOR_AVAILABLE else False
         unfold_sw = GPIO.input(self.unfold_pin) if NAVIGATOR_AVAILABLE else False
 
-        # Poll-based limit switch detection (fallback when interrupts unavailable)
-        if NAVIGATOR_AVAILABLE and not getattr(self, '_use_interrupts', False):
-            if fold_sw and self.state == "folding":
+        # Poll-based limit switch detection (only check destination switch)
+        if NAVIGATOR_AVAILABLE:
+            if self.state == "folding" and fold_sw:
                 self._stop_motor()
                 self.state = "folded"
                 logger.info("FoldMotor: fold limit reached (polled) - motor stopped")
-            elif unfold_sw and self.state == "unfolding":
+            elif self.state == "unfolding" and unfold_sw:
                 self._stop_motor()
                 self.state = "unfolded"
                 logger.info("FoldMotor: unfold limit reached (polled) - motor stopped")
@@ -527,6 +574,9 @@ class FoldMotor:
         return {
             "state": self.state,
             "pwm_value": self.current_pwm,
+            "pwm_middle": self.pwm_middle,
+            "pwm_max_cw": self.pwm_max_cw,
+            "pwm_min_ccw": self.pwm_min_ccw,
             "fold_switch": bool(fold_sw),
             "unfold_switch": bool(unfold_sw),
         }
@@ -809,6 +859,11 @@ async def set_config(config: dict) -> Any:
         if CONFIG.get("launcher_invert", False) != old_launcher_inv:
             encoder_reader.reset_counter(CONFIG.get("launcher_encoder_address", 2))
             logger.info("Launcher encoder reset due to invert change")
+
+    # Reload fold motor config
+    fold_motor._load_config()
+    fold_motor.current_pwm = fold_motor.pwm_middle
+    logger.info(f"Fold motor config reloaded: middle={fold_motor.pwm_middle}, fold={fold_motor.pwm_fold}, unfold={fold_motor.pwm_unfold}")
 
     logger.info("Config updated and encoder restarted")
     return {"status": "ok", "config": CONFIG}

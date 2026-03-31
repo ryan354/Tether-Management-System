@@ -667,6 +667,19 @@
 </div>
 
 <div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
+<h3 style="color:#f0883e;margin:0 0 10px 0;font-size:14px">🔧 USBL Fold Motor (Basic ESC T200)</h3>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">PWM Middle</label><input type="number" id="config-fold-middle" step="1" value="1500" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Max CW (full fwd)</label><input type="number" id="config-fold-max-cw" step="1" value="1100" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Min CCW (full rev)</label><input type="number" id="config-fold-min-ccw" step="1" value="1900" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Fold Speed %</label><input type="number" id="config-fold-speed" min="10" max="100" step="5" value="50" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+<div style="flex:1; min-width:100px"><label style="font-size:11px;color:#8b949e">Unfold Speed %</label><input type="number" id="config-unfold-speed" min="10" max="100" step="5" value="50" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;border-radius:4px;color:#fff"></div>
+</div>
+</div>
+
+<div style="margin-bottom:20px;padding:15px;background:#0d1117;border-radius:8px">
 <h3 style="color:#58a6ff;margin:0 0 10px 0;font-size:14px">🔄 Reset Counters</h3>
 <button onclick="resetEncoder('tether')" style="padding:8px 15px;background:#f85149;border:none;border-radius:6px;color:#fff;cursor:pointer;margin-right:10px">Reset Tether</button>
 <button onclick="resetEncoder('launcher')" style="padding:8px 15px;background:#f85149;border:none;border-radius:6px;color:#fff;cursor:pointer">Reset Launcher</button>
@@ -903,11 +916,6 @@
             </div>
         </div>
 
-        <div class="pwm-bar" style="margin-top:15px">
-            <div class="pwm-fill" id="fold-pwm-fill"
-                 style="width:50%;background:linear-gradient(90deg,#f0883e,#ffb347)"></div>
-            <span class="pwm-text">PWM: <span id="fold-pwm">1000</span></span>
-        </div>
     </div>
 
     <script>
@@ -968,6 +976,12 @@ async function loadConfig() {
                 document.getElementById('config-tether-kp').value = tc.kp || 12;
                 document.getElementById('config-tether-position-gain').value = tc.position_gain || 1.0;
                 document.getElementById('config-tether-accel').value = tc.accel || 0.03;
+                const fc = c.fold_ctrl || {};
+                document.getElementById('config-fold-middle').value = fc.pwm_middle || 1500;
+                document.getElementById('config-fold-max-cw').value = fc.pwm_max_cw || 1100;
+                document.getElementById('config-fold-min-ccw').value = fc.pwm_min_ccw || 1900;
+                document.getElementById('config-fold-speed').value = fc.fold_speed_pct || 50;
+                document.getElementById('config-unfold-speed').value = fc.unfold_speed_pct || 50;
                 const lc = c.launcher_ctrl || {};
                 document.getElementById('config-launcher-ff-gain').value = lc.ff_gain || 75;
                 document.getElementById('config-launcher-kp').value = lc.kp || 12;
@@ -993,12 +1007,19 @@ async function saveSettings() {
                         accel: parseFloat(document.getElementById('config-tether-accel').value || 0.03),
                         decel: parseFloat(document.getElementById('config-tether-accel').value || 0.03)
                     },
-                    launcher_ctrl: { 
+                    launcher_ctrl: {
                         ff_gain: parseFloat(document.getElementById('config-launcher-ff-gain').value || 75),
                         kp: parseFloat(document.getElementById('config-launcher-kp').value || 12),
                         position_gain: parseFloat(document.getElementById('config-launcher-position-gain').value || 1.0),
                         accel: parseFloat(document.getElementById('config-launcher-accel').value || 0.03),
                         decel: parseFloat(document.getElementById('config-launcher-accel').value || 0.03)
+                    },
+                    fold_ctrl: {
+                        pwm_middle: parseInt(document.getElementById('config-fold-middle').value || 1500),
+                        pwm_max_cw: parseInt(document.getElementById('config-fold-max-cw').value || 1100),
+                        pwm_min_ccw: parseInt(document.getElementById('config-fold-min-ccw').value || 1900),
+                        fold_speed_pct: parseInt(document.getElementById('config-fold-speed').value || 50),
+                        unfold_speed_pct: parseInt(document.getElementById('config-unfold-speed').value || 50)
                     }
                 })});
                 closeSettings(); alert('Settings saved! Restart service to apply.');
@@ -1249,8 +1270,6 @@ async function saveSettings() {
             const badge = document.getElementById('fold-state-badge');
             const foldDot = document.getElementById('fold-switch-dot');
             const unfoldDot = document.getElementById('unfold-switch-dot');
-            const pwmSpan = document.getElementById('fold-pwm');
-            const pwmFill = document.getElementById('fold-pwm-fill');
 
             btn.dataset.foldState = state;
 
@@ -1298,10 +1317,6 @@ async function saveSettings() {
             foldDot.className = 'switch-dot' + (foldData.fold_switch ? ' active' : '');
             unfoldDot.className = 'switch-dot' + (foldData.unfold_switch ? ' active' : '');
 
-            const pwmVal = foldData.pwm_value || 1000;
-            pwmSpan.textContent = pwmVal;
-            const pwmPct = Math.round(((pwmVal - 700) / 600) * 100);
-            pwmFill.style.width = pwmPct + '%';
         }
     </script>
 </body>

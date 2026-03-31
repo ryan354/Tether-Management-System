@@ -67,29 +67,50 @@ PWM_MIDDLE = 1000
 PWM_MAX_CW = 700    # Full speed clockwise
 PWM_MIN_CCW = 1300  # Full speed counter-clockwise
 
-# Try direct PCA9685 I2C control (bypasses Navigator library conflicts)
+# Try direct PCA9685 I2C control (Navigator board: external 24.576 MHz clock, OE on GPIO 26)
 try:
-    import smbus
-    I2C_BUS = 4  # Bus 4 has PCA9685
+    try:
+        import smbus
+    except ImportError:
+        import smbus2 as smbus
+    import RPi.GPIO as GPIO
+
+    I2C_BUS = 4  # Navigator PCA9685 on bus 4
     PCA9685_ADDR = 0x40
     bus = smbus.SMBus(I2C_BUS)
-    
+
     # PCA9685 registers
     PCA9685_MODE1 = 0x00
+    PCA9685_MODE2 = 0x01
     PCA9685_PRESCALE = 0xFE
     PCA9685_LED0_ON_L = 0x06
-    
-    # Set PWM frequency (250 Hz)
-    # Prescale = round(25MHz / (4096 * freq)) - 1
-    prescale = int(round(25000000 / (4096 * PWM_FREQ)) - 1)
-    bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x10)  # Sleep
+
+    # --- Enable Output Enable pin (GPIO 26, active LOW) ---
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(26, GPIO.OUT)
+    GPIO.output(26, GPIO.LOW)  # LOW = outputs enabled
+    logger.info("PCA9685 OE pin (GPIO 26) driven LOW - outputs enabled")
+
+    # --- Init PCA9685 with external 24.576 MHz clock ---
+    # Step 1: Sleep mode
+    bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x10)
+    time.sleep(0.005)
+    # Step 2: Enable external clock (bit 6) + sleep (bit 4)
+    bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x50)
+    time.sleep(0.005)
+    # Step 3: Set prescale for 250 Hz using 24.576 MHz external clock
+    # Prescale = round(24576000 / (4096 * 250)) - 1 = 23
+    prescale = int(round(24576000 / (4096 * PWM_FREQ)) - 1)
     bus.write_byte_data(PCA9685_ADDR, PCA9685_PRESCALE, prescale)
-    bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x00)  # Wake up
-    bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x20)  # Auto-increment
-    
+    time.sleep(0.005)
+    # Step 4: Wake up with external clock + auto-increment
+    bus.write_byte_data(PCA9685_ADDR, PCA9685_MODE1, 0x60)  # EXTCLK(0x40) + AI(0x20)
+    time.sleep(0.005)
+
     NAVIGATOR_AVAILABLE = True
-    logger.info(f"PCA9685 PWM initialized at {PWM_FREQ} Hz via I2C")
-    
+    logger.info(f"PCA9685 PWM initialized at {PWM_FREQ} Hz (ext 24.576 MHz clock, prescale={prescale})")
+
     def set_pwm(channel, value):
         """Set PWM value for channel (0-4095)"""
         if value < 0:
@@ -98,22 +119,23 @@ try:
             value = 4095
         reg = PCA9685_LED0_ON_L + (channel * 4)
         try:
-            bus.write_byte_data(PCA9685_ADDR, reg, 0)  # ON at 0
-            bus.write_byte_data(PCA9685_ADDR, reg + 2, value & 0xFF)  # OFF low byte
-            bus.write_byte_data(PCA9685_ADDR, reg + 3, (value >> 8) & 0xFF)  # OFF high byte
+            bus.write_byte_data(PCA9685_ADDR, reg, 0)       # ON_L
+            bus.write_byte_data(PCA9685_ADDR, reg + 1, 0)   # ON_H
+            bus.write_byte_data(PCA9685_ADDR, reg + 2, value & 0xFF)       # OFF_L
+            bus.write_byte_data(PCA9685_ADDR, reg + 3, (value >> 8) & 0xFF)  # OFF_H
         except OSError as e:
-            # Retry once after short delay
             time.sleep(0.05)
             try:
                 bus.write_byte_data(PCA9685_ADDR, reg, 0)
+                bus.write_byte_data(PCA9685_ADDR, reg + 1, 0)
                 bus.write_byte_data(PCA9685_ADDR, reg + 2, value & 0xFF)
                 bus.write_byte_data(PCA9685_ADDR, reg + 3, (value >> 8) & 0xFF)
             except OSError as e2:
                 logger.error(f"Failed to set PWM channel {channel} to {value}: {e2}")
-    
+
     def enable_pwm():
-        pass  # Already enabled
-    
+        GPIO.output(26, GPIO.LOW)
+
 except Exception as e:
     NAVIGATOR_AVAILABLE = False
     logger.warning(f"I2C PWM not available: {e} - running in simulation mode")

@@ -7,7 +7,7 @@ Trapezoidal velocity profile + Feedforward-P control, with a web UI.
 
 ```bash
 git clone https://github.com/ryan354/Tether-Management-System.git /home/pi/motor-control
-cd /home/pi/motor-control
+cd /Tether-Management-System
 bash setup.sh
 ```
 
@@ -74,6 +74,11 @@ Base URL: `http://<pi-ip>:8888/v1.0`
 **Service won't start:**
 ```bash
 journalctl -u motor-control -n 50 --no-pager
+```
+**Raspi Wifi no Internet:**
+```
+route wifi adapter as default gateway
+nmcli connection show
 ```
 
 **No I2C (PCA9685 not found):**

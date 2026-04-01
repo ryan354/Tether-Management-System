@@ -658,26 +658,16 @@ async def set_direct_pwm(motor_id: str, pwm_value: int) -> Any:
     
     motor = motors[motor_id]
     if pwm_value < 0:
-        # Disable direct mode - set to neutral (1000)
+        # Disable direct mode
         motor.direct_pwm = None
-        pca9685_value = int(1000 / 4000 * 4095)  # 1000 -> 1023
-        if NAVIGATOR_AVAILABLE:
-            set_pwm(motor.pwm_channel, pca9685_value)
-            enable_pwm()
-        logger.info(f"{motor_id}: Direct PWM disabled - set to neutral (1000)")
+        motor.stop()
+        logger.info(f"{motor_id}: Direct PWM disabled")
     else:
-        # Clamp to 700-1300 (Ryan's spec)
+        # Clamp to 700-1300 and store; motor.update() applies inversion + writes PCA9685
         pwm_value = max(700, min(1300, pwm_value))
         motor.direct_pwm = pwm_value
-        # Convert RC PWM (700-1300) to PCA9685 (0-4095)
-        # 250Hz = 4000us period: pca9685 = (rc_us / 4000) * 4095
-        pca9685_value = int(pwm_value / 4000 * 4095)
-        # Apply immediately
-        if NAVIGATOR_AVAILABLE:
-            set_pwm(motor.pwm_channel, pca9685_value)
-            enable_pwm()
-        logger.info(f"{motor_id}: Direct PWM set to {pwm_value} (RC) -> {pca9685_value} (PCA9685)")
-    
+        logger.info(f"{motor_id}: Direct PWM set to {pwm_value} (RC)")
+
     return {"status": "ok", "direct_pwm": motor.direct_pwm, "pwm_value": pwm_value if motor.direct_pwm else "PID mode"}
 
 @app.post("/motor/{motor_id}/pause_resume", status_code=status.HTTP_200_OK)

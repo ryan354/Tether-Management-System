@@ -1,0 +1,2239 @@
+{
+  "nodes": [
+    {
+      "id": "g0",
+      "type": "group",
+      "label": "FastAPI Core & Config",
+      "x": 0,
+      "y": 0,
+      "width": 1100,
+      "height": 1020,
+      "color": "1"
+    },
+    {
+      "id": "n_main_motor_set_controller_config",
+      "type": "file",
+      "file": "graphify/obsidian/.set_controller_config().md",
+      "x": 20,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_basemodel",
+      "type": "file",
+      "file": "graphify/obsidian/BaseModel.md",
+      "x": 220,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_controllerconfig",
+      "type": "file",
+      "file": "graphify/obsidian/ControllerConfig.md",
+      "x": 420,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_796",
+      "type": "file",
+      "file": "graphify/obsidian/Get current configuration.md",
+      "x": 20,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_890",
+      "type": "file",
+      "file": "graphify/obsidian/List available serial ports.md",
+      "x": 220,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motordata",
+      "type": "file",
+      "file": "graphify/obsidian/MotorData.md",
+      "x": 420,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_873",
+      "type": "file",
+      "file": "graphify/obsidian/Reset encoder counter (tether or launcher).md",
+      "x": 20,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_603",
+      "type": "file",
+      "file": "graphify/obsidian/Sync encoder invert flags from config..md",
+      "x": 220,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_676",
+      "type": "file",
+      "file": "graphify/obsidian/Toggle pauseresume - STOP immediately (PWM=1000), resume from saved targets.md",
+      "x": 420,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_636",
+      "type": "file",
+      "file": "graphify/obsidian/Update Trapezoidal + FF+P controller parameters..md",
+      "x": 20,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_apply_encoder_invert",
+      "type": "file",
+      "file": "graphify/obsidian/_apply_encoder_invert().md",
+      "x": 220,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_get_config",
+      "type": "file",
+      "file": "graphify/obsidian/get_config().md",
+      "x": 420,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_get_encoder_status",
+      "type": "file",
+      "file": "graphify/obsidian/get_encoder_status().md",
+      "x": 20,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_get_info",
+      "type": "file",
+      "file": "graphify/obsidian/get_info().md",
+      "x": 220,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_get_motor_status",
+      "type": "file",
+      "file": "graphify/obsidian/get_motor_status().md",
+      "x": 420,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_list_serial_ports",
+      "type": "file",
+      "file": "graphify/obsidian/list_serial_ports().md",
+      "x": 20,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app_main_py",
+      "type": "file",
+      "file": "graphify/obsidian/main.py.md",
+      "x": 220,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_pause_resume_motor",
+      "type": "file",
+      "file": "graphify/obsidian/pause_resume_motor().md",
+      "x": 420,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_reset_encoder",
+      "type": "file",
+      "file": "graphify/obsidian/reset_encoder().md",
+      "x": 20,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_root",
+      "type": "file",
+      "file": "graphify/obsidian/root().md",
+      "x": 220,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_save_config",
+      "type": "file",
+      "file": "graphify/obsidian/save_config().md",
+      "x": 420,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_set_config",
+      "type": "file",
+      "file": "graphify/obsidian/set_config().md",
+      "x": 20,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_set_controller",
+      "type": "file",
+      "file": "graphify/obsidian/set_controller().md",
+      "x": 220,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_startup_event",
+      "type": "file",
+      "file": "graphify/obsidian/startup_event().md",
+      "x": 420,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_stop_motor",
+      "type": "file",
+      "file": "graphify/obsidian/stop_motor().md",
+      "x": 20,
+      "y": 720,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g1",
+      "type": "group",
+      "label": "Encoder Serial Interface",
+      "x": 1180,
+      "y": 0,
+      "width": 1100,
+      "height": 920,
+      "color": "2"
+    },
+    {
+      "id": "n_encoder_encoderreader_init",
+      "type": "file",
+      "file": "graphify/obsidian/.__init__().md",
+      "x": 1200,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_init_serial",
+      "type": "file",
+      "file": "graphify/obsidian/._init_serial().md",
+      "x": 1400,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_read_encoder",
+      "type": "file",
+      "file": "graphify/obsidian/._read_encoder().md",
+      "x": 1600,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_read_loop",
+      "type": "file",
+      "file": "graphify/obsidian/._read_loop().md",
+      "x": 1200,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_add_encoder",
+      "type": "file",
+      "file": "graphify/obsidian/.add_encoder().md",
+      "x": 1400,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_get_status",
+      "type": "file",
+      "file": "graphify/obsidian/.get_status().md",
+      "x": 1600,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_get_status_dict",
+      "type": "file",
+      "file": "graphify/obsidian/.get_status_dict().md",
+      "x": 1200,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_reset_counter",
+      "type": "file",
+      "file": "graphify/obsidian/.reset_counter().md",
+      "x": 1400,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_start",
+      "type": "file",
+      "file": "graphify/obsidian/.start().md",
+      "x": 1600,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader_stop",
+      "type": "file",
+      "file": "graphify/obsidian/.stop().md",
+      "x": 1200,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_encoderreader",
+      "type": "file",
+      "file": "graphify/obsidian/EncoderReader.md",
+      "x": 1400,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_240",
+      "type": "file",
+      "file": "graphify/obsidian/Get all encoder statuses.md",
+      "x": 1600,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_255",
+      "type": "file",
+      "file": "graphify/obsidian/Get named status dictionary.md",
+      "x": 1200,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_90",
+      "type": "file",
+      "file": "graphify/obsidian/Initialize serial connection.md",
+      "x": 1400,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_225",
+      "type": "file",
+      "file": "graphify/obsidian/Reset counter for specific encoder.md",
+      "x": 1600,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_72",
+      "type": "file",
+      "file": "graphify/obsidian/Start encoder reading thread.md",
+      "x": 1200,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_81",
+      "type": "file",
+      "file": "graphify/obsidian/Stop encoder reading thread.md",
+      "x": 1400,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_rationale_51",
+      "type": "file",
+      "file": "graphify/obsidian/Thread-safe encoder reader with Modbus RTU.md",
+      "x": 1600,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_build_request",
+      "type": "file",
+      "file": "graphify/obsidian/build_request().md",
+      "x": 1200,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_crc16",
+      "type": "file",
+      "file": "graphify/obsidian/crc16().md",
+      "x": 1400,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_app_encoder_py",
+      "type": "file",
+      "file": "graphify/obsidian/encoder.py.md",
+      "x": 1600,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_get_encoder_reader",
+      "type": "file",
+      "file": "graphify/obsidian/get_encoder_reader().md",
+      "x": 1200,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_init_encoder",
+      "type": "file",
+      "file": "graphify/obsidian/init_encoder().md",
+      "x": 1400,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_encoder_parse_response",
+      "type": "file",
+      "file": "graphify/obsidian/parse_response().md",
+      "x": 1600,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g2",
+      "type": "group",
+      "label": "USBL Fold Mechanism",
+      "x": 2360,
+      "y": 0,
+      "width": 1100,
+      "height": 920,
+      "color": "3"
+    },
+    {
+      "id": "n_main_foldmotor_init",
+      "type": "file",
+      "file": "graphify/obsidian/.__init__()_2.md",
+      "x": 2380,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_load_config",
+      "type": "file",
+      "file": "graphify/obsidian/._load_config().md",
+      "x": 2580,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_on_fold_limit",
+      "type": "file",
+      "file": "graphify/obsidian/._on_fold_limit().md",
+      "x": 2780,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_on_unfold_limit",
+      "type": "file",
+      "file": "graphify/obsidian/._on_unfold_limit().md",
+      "x": 2380,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_stop_motor",
+      "type": "file",
+      "file": "graphify/obsidian/._stop_motor().md",
+      "x": 2580,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_check_safety_timeout",
+      "type": "file",
+      "file": "graphify/obsidian/.check_safety_timeout().md",
+      "x": 2780,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_fold",
+      "type": "file",
+      "file": "graphify/obsidian/.fold().md",
+      "x": 2380,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_get_status",
+      "type": "file",
+      "file": "graphify/obsidian/.get_status()_1.md",
+      "x": 2580,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_stop",
+      "type": "file",
+      "file": "graphify/obsidian/.stop()_2.md",
+      "x": 2780,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor_unfold",
+      "type": "file",
+      "file": "graphify/obsidian/.unfold().md",
+      "x": 2380,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_916",
+      "type": "file",
+      "file": "graphify/obsidian/Emergency stop the fold motor..md",
+      "x": 2580,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_foldmotor",
+      "type": "file",
+      "file": "graphify/obsidian/FoldMotor.md",
+      "x": 2780,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_923",
+      "type": "file",
+      "file": "graphify/obsidian/Get fold mechanism status..md",
+      "x": 2380,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_468",
+      "type": "file",
+      "file": "graphify/obsidian/Load fold motor PWM settings from CONFIG..md",
+      "x": 2580,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_147",
+      "type": "file",
+      "file": "graphify/obsidian/Set PWM value for channel (0-4095).md",
+      "x": 2780,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_655",
+      "type": "file",
+      "file": "graphify/obsidian/Set direct PWM value (700-1300). Set to -1 to disable direct mode..md",
+      "x": 2380,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_421",
+      "type": "file",
+      "file": "graphify/obsidian/Simple motor controller for foldunfold mechanism with limit switches..md",
+      "x": 2580,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_909",
+      "type": "file",
+      "file": "graphify/obsidian/Unfold the USBL mount..md",
+      "x": 2780,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_fold_mount",
+      "type": "file",
+      "file": "graphify/obsidian/fold_mount().md",
+      "x": 2380,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_get_fold_status",
+      "type": "file",
+      "file": "graphify/obsidian/get_fold_status().md",
+      "x": 2580,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_set_direct_pwm",
+      "type": "file",
+      "file": "graphify/obsidian/set_direct_pwm().md",
+      "x": 2780,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_set_pwm",
+      "type": "file",
+      "file": "graphify/obsidian/set_pwm().md",
+      "x": 2380,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_stop_fold",
+      "type": "file",
+      "file": "graphify/obsidian/stop_fold().md",
+      "x": 2580,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_unfold_mount",
+      "type": "file",
+      "file": "graphify/obsidian/unfold_mount().md",
+      "x": 2780,
+      "y": 640,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g3",
+      "type": "group",
+      "label": "Motor PWM Control",
+      "x": 3540,
+      "y": 0,
+      "width": 1100,
+      "height": 820,
+      "color": "4"
+    },
+    {
+      "id": "n_main_motor_init",
+      "type": "file",
+      "file": "graphify/obsidian/.__init__()_1.md",
+      "x": 3560,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_compute_rc_pwm",
+      "type": "file",
+      "file": "graphify/obsidian/._compute_rc_pwm().md",
+      "x": 3760,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_invert_pwm",
+      "type": "file",
+      "file": "graphify/obsidian/._invert_pwm().md",
+      "x": 3960,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_ramp",
+      "type": "file",
+      "file": "graphify/obsidian/._ramp().md",
+      "x": 3560,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_set_desired",
+      "type": "file",
+      "file": "graphify/obsidian/.set_desired().md",
+      "x": 3760,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_set_pid_config",
+      "type": "file",
+      "file": "graphify/obsidian/.set_pid_config().md",
+      "x": 3960,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_stop",
+      "type": "file",
+      "file": "graphify/obsidian/.stop()_1.md",
+      "x": 3560,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor_update",
+      "type": "file",
+      "file": "graphify/obsidian/.update().md",
+      "x": 3760,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_257",
+      "type": "file",
+      "file": "graphify/obsidian/Invert PWM around neutral (1000). 850-1150, 1150-850, etc..md",
+      "x": 3960,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_402",
+      "type": "file",
+      "file": "graphify/obsidian/Legacy alias - use set_controller_config instead..md",
+      "x": 3560,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_motor",
+      "type": "file",
+      "file": "graphify/obsidian/Motor.md",
+      "x": 3760,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_263",
+      "type": "file",
+      "file": "graphify/obsidian/Step current toward target by at most acceldecel_rate per cycle..md",
+      "x": 3960,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_406",
+      "type": "file",
+      "file": "graphify/obsidian/Stop motor - set PWM to neutral and reset ramp state..md",
+      "x": 3560,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_271",
+      "type": "file",
+      "file": "graphify/obsidian/Trapezoidal + FF+P controller - RC PWM (700-1300).          Stage 1 - Length.md",
+      "x": 3760,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_334",
+      "type": "file",
+      "file": "graphify/obsidian/Update motor state with encoder feedback and compute PWM..md",
+      "x": 3960,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_rationale_645",
+      "type": "file",
+      "file": "graphify/obsidian/Update motor with encoder feedback (cable length in meters, speed in ms).md",
+      "x": 3560,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_enable_pwm",
+      "type": "file",
+      "file": "graphify/obsidian/enable_pwm().md",
+      "x": 3760,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_get_all_motors_status",
+      "type": "file",
+      "file": "graphify/obsidian/get_all_motors_status().md",
+      "x": 3960,
+      "y": 480,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_load_config",
+      "type": "file",
+      "file": "graphify/obsidian/load_config().md",
+      "x": 3560,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_set_motor",
+      "type": "file",
+      "file": "graphify/obsidian/set_motor().md",
+      "x": 3760,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main_update_encoder",
+      "type": "file",
+      "file": "graphify/obsidian/update_encoder().md",
+      "x": 3960,
+      "y": 560,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g4",
+      "type": "group",
+      "label": "Hardware Documentation",
+      "x": 0,
+      "y": 1100,
+      "width": 880,
+      "height": 520,
+      "color": "5"
+    },
+    {
+      "id": "n_claude_md_graphify",
+      "type": "file",
+      "file": "graphify/obsidian/CLAUDE.md Graphify Config.md",
+      "x": 20,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_direct_pwm_mode",
+      "type": "file",
+      "file": "graphify/obsidian/Direct PWM Mode.md",
+      "x": 220,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_fold_limit_switches",
+      "type": "file",
+      "file": "graphify/obsidian/FoldUnfold Limit Switches.md",
+      "x": 420,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_launcher_reel_motor",
+      "type": "file",
+      "file": "graphify/obsidian/Launcher Reel Motor.md",
+      "x": 20,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_navigator_board",
+      "type": "file",
+      "file": "graphify/obsidian/Navigator Board (Blue Robotics).md",
+      "x": 220,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_pca9685",
+      "type": "file",
+      "file": "graphify/obsidian/PCA9685 PWM Controller.md",
+      "x": 420,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_raspberry_pi",
+      "type": "file",
+      "file": "graphify/obsidian/Raspberry Pi.md",
+      "x": 20,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_rationale_fold_safety",
+      "type": "file",
+      "file": "graphify/obsidian/Rationale 30s Safety Timeout for Fold.md",
+      "x": 220,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_tether_management_system",
+      "type": "file",
+      "file": "graphify/obsidian/Tether Management System.md",
+      "x": 420,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_tether_reel_motor",
+      "type": "file",
+      "file": "graphify/obsidian/Tether Reel Motor.md",
+      "x": 20,
+      "y": 1420,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_usbl_fold_motor",
+      "type": "file",
+      "file": "graphify/obsidian/USBL Fold Mount Motor (T200).md",
+      "x": 220,
+      "y": 1420,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_usbl_fold_mechanism",
+      "type": "file",
+      "file": "graphify/obsidian/USBL FoldUnfold Mechanism.md",
+      "x": 420,
+      "y": 1420,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g5",
+      "type": "group",
+      "label": "Web App & Dependencies",
+      "x": 1180,
+      "y": 1100,
+      "width": 660,
+      "height": 420,
+      "color": "6"
+    },
+    {
+      "id": "n_readme_fastapi_server",
+      "type": "file",
+      "file": "graphify/obsidian/FastAPI Server (main.py).md",
+      "x": 1200,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_rest_api",
+      "type": "file",
+      "file": "graphify/obsidian/REST API (v1.0).md",
+      "x": 1400,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_web_ui",
+      "type": "file",
+      "file": "graphify/obsidian/Web UI.md",
+      "x": 1600,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_config_json",
+      "type": "file",
+      "file": "graphify/obsidian/config.json (Persistent Config).md",
+      "x": 1200,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_fastapi",
+      "type": "file",
+      "file": "graphify/obsidian/fastapi (Python Package).md",
+      "x": 1400,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_fastapi_versioning",
+      "type": "file",
+      "file": "graphify/obsidian/fastapi-versioning (Python Package).md",
+      "x": 1600,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_systemd_service",
+      "type": "file",
+      "file": "graphify/obsidian/motor-control systemd Service.md",
+      "x": 1200,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_setup_script",
+      "type": "file",
+      "file": "graphify/obsidian/setup.sh Installer.md",
+      "x": 1400,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_uvicorn",
+      "type": "file",
+      "file": "graphify/obsidian/uvicorn (Python Package).md",
+      "x": 1600,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g6",
+      "type": "group",
+      "label": "Motion Control & Feedback",
+      "x": 2360,
+      "y": 1100,
+      "width": 660,
+      "height": 420,
+      "color": "1"
+    },
+    {
+      "id": "n_readme_direction_inversion",
+      "type": "file",
+      "file": "graphify/obsidian/Direction Inversion Feature.md",
+      "x": 2380,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_encoder_module",
+      "type": "file",
+      "file": "graphify/obsidian/Encoder Module (encoder.py).md",
+      "x": 2580,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_ff_p_controller",
+      "type": "file",
+      "file": "graphify/obsidian/Feedforward-P Speed Controller.md",
+      "x": 2780,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_rs485_modbus_encoder",
+      "type": "file",
+      "file": "graphify/obsidian/RS485 Modbus RTU Encoder.md",
+      "x": 2380,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_rationale_trapezoidal",
+      "type": "file",
+      "file": "graphify/obsidian/Rationale Trapezoidal + FF-P Control.md",
+      "x": 2580,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_readme_trapezoidal_velocity_profile",
+      "type": "file",
+      "file": "graphify/obsidian/Trapezoidal Velocity Profile.md",
+      "x": 2780,
+      "y": 1260,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_requirements_pyserial",
+      "type": "file",
+      "file": "graphify/obsidian/pyserial (Python Package).md",
+      "x": 2380,
+      "y": 1340,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g7",
+      "type": "group",
+      "label": "Setup Script",
+      "x": 3540,
+      "y": 1100,
+      "width": 600,
+      "height": 400,
+      "color": "2"
+    },
+    {
+      "id": "n_app_setup_py",
+      "type": "file",
+      "file": "graphify/obsidian/setup.py.md",
+      "x": 3560,
+      "y": 1180,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g8",
+      "type": "group",
+      "label": "Logging (Loguru)",
+      "x": 0,
+      "y": 1700,
+      "width": 600,
+      "height": 400,
+      "color": "3"
+    },
+    {
+      "id": "n_requirements_loguru",
+      "type": "file",
+      "file": "graphify/obsidian/loguru (Python Package).md",
+      "x": 20,
+      "y": 1780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g9",
+      "type": "group",
+      "label": "Data Validation (Pydantic)",
+      "x": 1180,
+      "y": 1700,
+      "width": 600,
+      "height": 400,
+      "color": "4"
+    },
+    {
+      "id": "n_requirements_pydantic",
+      "type": "file",
+      "file": "graphify/obsidian/pydantic (Python Package).md",
+      "x": 1200,
+      "y": 1780,
+      "width": 180,
+      "height": 60
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_app_encoder_py_encoder_crc16",
+      "fromNode": "n_app_encoder_py",
+      "toNode": "n_encoder_crc16",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_encoder_py_encoder_build_request",
+      "fromNode": "n_app_encoder_py",
+      "toNode": "n_encoder_build_request",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_encoder_py_encoder_parse_response",
+      "fromNode": "n_app_encoder_py",
+      "toNode": "n_encoder_parse_response",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_encoder_py_encoder_encoderreader",
+      "fromNode": "n_app_encoder_py",
+      "toNode": "n_encoder_encoderreader",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_encoder_py_encoder_get_encoder_reader",
+      "fromNode": "n_app_encoder_py",
+      "toNode": "n_encoder_get_encoder_reader",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_encoder_py_encoder_init_encoder",
+      "fromNode": "n_app_encoder_py",
+      "toNode": "n_encoder_init_encoder",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_crc16_encoder_build_request",
+      "fromNode": "n_encoder_crc16",
+      "toNode": "n_encoder_build_request",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_crc16_encoder_parse_response",
+      "fromNode": "n_encoder_crc16",
+      "toNode": "n_encoder_parse_response",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_build_request_encoder_encoderreader_read_encoder",
+      "fromNode": "n_encoder_build_request",
+      "toNode": "n_encoder_encoderreader_read_encoder",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_parse_response_encoder_encoderreader_read_encoder",
+      "fromNode": "n_encoder_parse_response",
+      "toNode": "n_encoder_encoderreader_read_encoder",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_init",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_start",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_start",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_stop",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_stop",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_init_serial",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_init_serial",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_read_loop",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_read_loop",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_read_encoder",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_read_encoder",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_add_encoder",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_add_encoder",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_reset_counter",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_reset_counter",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_get_status",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_get_status",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_encoderreader_get_status_dict",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_encoderreader_get_status_dict",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_init_encoder",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_init_encoder",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_encoder_rationale_51",
+      "fromNode": "n_encoder_encoderreader",
+      "toNode": "n_encoder_rationale_51",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_start_encoder_rationale_72",
+      "fromNode": "n_encoder_encoderreader_start",
+      "toNode": "n_encoder_rationale_72",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_stop_encoder_rationale_81",
+      "fromNode": "n_encoder_encoderreader_stop",
+      "toNode": "n_encoder_rationale_81",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_init_serial_encoder_encoderreader_read_loop",
+      "fromNode": "n_encoder_encoderreader_init_serial",
+      "toNode": "n_encoder_encoderreader_read_loop",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_init_serial_encoder_rationale_90",
+      "fromNode": "n_encoder_encoderreader_init_serial",
+      "toNode": "n_encoder_rationale_90",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_read_loop_encoder_encoderreader_read_encoder",
+      "fromNode": "n_encoder_encoderreader_read_loop",
+      "toNode": "n_encoder_encoderreader_read_encoder",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_add_encoder_encoder_init_encoder",
+      "fromNode": "n_encoder_encoderreader_add_encoder",
+      "toNode": "n_encoder_init_encoder",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_reset_counter_encoder_rationale_225",
+      "fromNode": "n_encoder_encoderreader_reset_counter",
+      "toNode": "n_encoder_rationale_225",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_get_status_encoder_encoderreader_get_status_dict",
+      "fromNode": "n_encoder_encoderreader_get_status",
+      "toNode": "n_encoder_encoderreader_get_status_dict",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_get_status_encoder_rationale_240",
+      "fromNode": "n_encoder_encoderreader_get_status",
+      "toNode": "n_encoder_rationale_240",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_encoder_encoderreader_get_status_dict_encoder_rationale_255",
+      "fromNode": "n_encoder_encoderreader_get_status_dict",
+      "toNode": "n_encoder_rationale_255",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_load_config",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_load_config",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_save_config",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_save_config",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_set_pwm",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_set_pwm",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_enable_pwm",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_enable_pwm",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_motordata",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_motordata",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_controllerconfig",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_controllerconfig",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_motor",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_motor",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_foldmotor",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_foldmotor",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_apply_encoder_invert",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_apply_encoder_invert",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_set_motor",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_set_motor",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_set_controller",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_set_controller",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_update_encoder",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_update_encoder",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_set_direct_pwm",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_set_direct_pwm",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_pause_resume_motor",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_pause_resume_motor",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_stop_motor",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_stop_motor",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_get_motor_status",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_get_motor_status",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_get_all_motors_status",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_get_all_motors_status",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_get_info",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_get_info",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_get_config",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_get_config",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_set_config",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_set_config",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_get_encoder_status",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_get_encoder_status",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_reset_encoder",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_reset_encoder",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_list_serial_ports",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_list_serial_ports",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_fold_mount",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_fold_mount",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_unfold_mount",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_unfold_mount",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_stop_fold",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_stop_fold",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_get_fold_status",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_get_fold_status",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_root",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_root",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_app_main_py_main_startup_event",
+      "fromNode": "n_app_main_py",
+      "toNode": "n_main_startup_event",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_main_load_config_main_motor_update",
+      "fromNode": "n_main_load_config",
+      "toNode": "n_main_motor_update",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_save_config_main_set_config",
+      "fromNode": "n_main_save_config",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_motor_update",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_motor_update",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_motor_stop",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_motor_stop",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_foldmotor_init",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_foldmotor_init",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_foldmotor_stop_motor",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_foldmotor_stop_motor",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_foldmotor_fold",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_foldmotor_fold",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_foldmotor_unfold",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_foldmotor_unfold",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_pwm_main_rationale_147",
+      "fromNode": "n_main_set_pwm",
+      "toNode": "n_main_rationale_147",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_enable_pwm_main_motor_update",
+      "fromNode": "n_main_enable_pwm",
+      "toNode": "n_main_motor_update",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_enable_pwm_main_motor_stop",
+      "fromNode": "n_main_enable_pwm",
+      "toNode": "n_main_motor_stop",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motordata_basemodel",
+      "fromNode": "n_main_motordata",
+      "toNode": "n_basemodel",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_basemodel_main_controllerconfig",
+      "fromNode": "n_basemodel",
+      "toNode": "n_main_controllerconfig",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_main_controllerconfig_main_set_config",
+      "fromNode": "n_main_controllerconfig",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_init",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_invert_pwm",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_invert_pwm",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_ramp",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_ramp",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_compute_rc_pwm",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_compute_rc_pwm",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_update",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_update",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_set_desired",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_set_desired",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_set_controller_config",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_set_controller_config",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_set_pid_config",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_set_pid_config",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_main_motor_stop",
+      "fromNode": "n_main_motor",
+      "toNode": "n_main_motor_stop",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_invert_pwm_main_motor_update",
+      "fromNode": "n_main_motor_invert_pwm",
+      "toNode": "n_main_motor_update",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_invert_pwm_main_rationale_257",
+      "fromNode": "n_main_motor_invert_pwm",
+      "toNode": "n_main_rationale_257",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_ramp_main_motor_compute_rc_pwm",
+      "fromNode": "n_main_motor_ramp",
+      "toNode": "n_main_motor_compute_rc_pwm",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_ramp_main_rationale_263",
+      "fromNode": "n_main_motor_ramp",
+      "toNode": "n_main_rationale_263",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_compute_rc_pwm_main_motor_update",
+      "fromNode": "n_main_motor_compute_rc_pwm",
+      "toNode": "n_main_motor_update",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_compute_rc_pwm_main_rationale_271",
+      "fromNode": "n_main_motor_compute_rc_pwm",
+      "toNode": "n_main_rationale_271",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_update_main_update_encoder",
+      "fromNode": "n_main_motor_update",
+      "toNode": "n_main_update_encoder",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_update_main_get_all_motors_status",
+      "fromNode": "n_main_motor_update",
+      "toNode": "n_main_get_all_motors_status",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_update_main_set_config",
+      "fromNode": "n_main_motor_update",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_update_main_rationale_334",
+      "fromNode": "n_main_motor_update",
+      "toNode": "n_main_rationale_334",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_set_desired_main_set_motor",
+      "fromNode": "n_main_motor_set_desired",
+      "toNode": "n_main_set_motor",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_set_controller_config_main_set_controller",
+      "fromNode": "n_main_motor_set_controller_config",
+      "toNode": "n_main_set_controller",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_set_controller_config_main_set_config",
+      "fromNode": "n_main_motor_set_controller_config",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_set_pid_config_main_rationale_402",
+      "fromNode": "n_main_motor_set_pid_config",
+      "toNode": "n_main_rationale_402",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_motor_stop_main_rationale_406",
+      "fromNode": "n_main_motor_stop",
+      "toNode": "n_main_rationale_406",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_init",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_load_config",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_load_config",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_stop_motor",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_stop_motor",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_on_fold_limit",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_on_fold_limit",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_on_unfold_limit",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_on_unfold_limit",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_fold",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_fold",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_unfold",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_unfold",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_stop",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_stop",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_check_safety_timeout",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_check_safety_timeout",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_foldmotor_get_status",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_foldmotor_get_status",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_main_rationale_421",
+      "fromNode": "n_main_foldmotor",
+      "toNode": "n_main_rationale_421",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_init_main_foldmotor_load_config",
+      "fromNode": "n_main_foldmotor_init",
+      "toNode": "n_main_foldmotor_load_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_load_config_main_set_config",
+      "fromNode": "n_main_foldmotor_load_config",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_load_config_main_rationale_468",
+      "fromNode": "n_main_foldmotor_load_config",
+      "toNode": "n_main_rationale_468",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_motor_main_foldmotor_on_fold_limit",
+      "fromNode": "n_main_foldmotor_stop_motor",
+      "toNode": "n_main_foldmotor_on_fold_limit",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_motor_main_foldmotor_on_unfold_limit",
+      "fromNode": "n_main_foldmotor_stop_motor",
+      "toNode": "n_main_foldmotor_on_unfold_limit",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_motor_main_foldmotor_stop",
+      "fromNode": "n_main_foldmotor_stop_motor",
+      "toNode": "n_main_foldmotor_stop",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_motor_main_foldmotor_check_safety_timeout",
+      "fromNode": "n_main_foldmotor_stop_motor",
+      "toNode": "n_main_foldmotor_check_safety_timeout",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_motor_main_foldmotor_get_status",
+      "fromNode": "n_main_foldmotor_stop_motor",
+      "toNode": "n_main_foldmotor_get_status",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_fold_main_fold_mount",
+      "fromNode": "n_main_foldmotor_fold",
+      "toNode": "n_main_fold_mount",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_unfold_main_unfold_mount",
+      "fromNode": "n_main_foldmotor_unfold",
+      "toNode": "n_main_unfold_mount",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_main_set_direct_pwm",
+      "fromNode": "n_main_foldmotor_stop",
+      "toNode": "n_main_set_direct_pwm",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_main_stop_motor",
+      "fromNode": "n_main_foldmotor_stop",
+      "toNode": "n_main_stop_motor",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_main_set_config",
+      "fromNode": "n_main_foldmotor_stop",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_stop_main_stop_fold",
+      "fromNode": "n_main_foldmotor_stop",
+      "toNode": "n_main_stop_fold",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_check_safety_timeout_main_foldmotor_get_status",
+      "fromNode": "n_main_foldmotor_check_safety_timeout",
+      "toNode": "n_main_foldmotor_get_status",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_get_status_main_get_all_motors_status",
+      "fromNode": "n_main_foldmotor_get_status",
+      "toNode": "n_main_get_all_motors_status",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_foldmotor_get_status_main_get_fold_status",
+      "fromNode": "n_main_foldmotor_get_status",
+      "toNode": "n_main_get_fold_status",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_apply_encoder_invert_main_set_config",
+      "fromNode": "n_main_apply_encoder_invert",
+      "toNode": "n_main_set_config",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_apply_encoder_invert_main_startup_event",
+      "fromNode": "n_main_apply_encoder_invert",
+      "toNode": "n_main_startup_event",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_main_apply_encoder_invert_main_rationale_603",
+      "fromNode": "n_main_apply_encoder_invert",
+      "toNode": "n_main_rationale_603",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_controller_main_rationale_636",
+      "fromNode": "n_main_set_controller",
+      "toNode": "n_main_rationale_636",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_update_encoder_main_rationale_645",
+      "fromNode": "n_main_update_encoder",
+      "toNode": "n_main_rationale_645",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_set_direct_pwm_main_rationale_655",
+      "fromNode": "n_main_set_direct_pwm",
+      "toNode": "n_main_rationale_655",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_pause_resume_motor_main_rationale_676",
+      "fromNode": "n_main_pause_resume_motor",
+      "toNode": "n_main_rationale_676",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_get_config_main_rationale_796",
+      "fromNode": "n_main_get_config",
+      "toNode": "n_main_rationale_796",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_reset_encoder_main_rationale_873",
+      "fromNode": "n_main_reset_encoder",
+      "toNode": "n_main_rationale_873",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_list_serial_ports_main_rationale_890",
+      "fromNode": "n_main_list_serial_ports",
+      "toNode": "n_main_rationale_890",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_unfold_mount_main_rationale_909",
+      "fromNode": "n_main_unfold_mount",
+      "toNode": "n_main_rationale_909",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_stop_fold_main_rationale_916",
+      "fromNode": "n_main_stop_fold",
+      "toNode": "n_main_rationale_916",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_main_get_fold_status_main_rationale_923",
+      "fromNode": "n_main_get_fold_status",
+      "toNode": "n_main_rationale_923",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_tether_management_system_readme_raspberry_pi",
+      "fromNode": "n_readme_tether_management_system",
+      "toNode": "n_readme_raspberry_pi",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_tether_management_system_readme_navigator_board",
+      "fromNode": "n_readme_tether_management_system",
+      "toNode": "n_readme_navigator_board",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_navigator_board_readme_pca9685",
+      "fromNode": "n_readme_navigator_board",
+      "toNode": "n_readme_pca9685",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_usbl_fold_motor_readme_usbl_fold_mechanism",
+      "fromNode": "n_readme_usbl_fold_motor",
+      "toNode": "n_readme_usbl_fold_mechanism",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_rs485_modbus_encoder_readme_encoder_module",
+      "fromNode": "n_readme_rs485_modbus_encoder",
+      "toNode": "n_readme_encoder_module",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_fold_limit_switches_readme_usbl_fold_mechanism",
+      "fromNode": "n_readme_fold_limit_switches",
+      "toNode": "n_readme_usbl_fold_mechanism",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_trapezoidal_velocity_profile_readme_ff_p_controller",
+      "fromNode": "n_readme_trapezoidal_velocity_profile",
+      "toNode": "n_readme_ff_p_controller",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_trapezoidal_velocity_profile_readme_rationale_trapezoidal",
+      "fromNode": "n_readme_trapezoidal_velocity_profile",
+      "toNode": "n_readme_rationale_trapezoidal",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_ff_p_controller_readme_rationale_trapezoidal",
+      "fromNode": "n_readme_ff_p_controller",
+      "toNode": "n_readme_rationale_trapezoidal",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_fastapi_server_readme_rest_api",
+      "fromNode": "n_readme_fastapi_server",
+      "toNode": "n_readme_rest_api",
+      "label": "implements [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_fastapi_server_readme_systemd_service",
+      "fromNode": "n_readme_fastapi_server",
+      "toNode": "n_readme_systemd_service",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_usbl_fold_mechanism_readme_rationale_fold_safety",
+      "fromNode": "n_readme_usbl_fold_mechanism",
+      "toNode": "n_readme_rationale_fold_safety",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_pca9685_readme_tether_reel_motor",
+      "fromNode": "n_readme_pca9685",
+      "toNode": "n_readme_tether_reel_motor",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_pca9685_readme_launcher_reel_motor",
+      "fromNode": "n_readme_pca9685",
+      "toNode": "n_readme_launcher_reel_motor",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_pca9685_readme_usbl_fold_motor",
+      "fromNode": "n_readme_pca9685",
+      "toNode": "n_readme_usbl_fold_motor",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_rs485_modbus_encoder_readme_ff_p_controller",
+      "fromNode": "n_readme_rs485_modbus_encoder",
+      "toNode": "n_readme_ff_p_controller",
+      "label": "shares_data_with [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_web_ui_readme_config_json",
+      "fromNode": "n_readme_web_ui",
+      "toNode": "n_readme_config_json",
+      "label": "shares_data_with [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_fastapi_server_requirements_fastapi",
+      "fromNode": "n_readme_fastapi_server",
+      "toNode": "n_requirements_fastapi",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_readme_encoder_module_requirements_pyserial",
+      "fromNode": "n_readme_encoder_module",
+      "toNode": "n_requirements_pyserial",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_readme_systemd_service_readme_setup_script",
+      "fromNode": "n_readme_systemd_service",
+      "toNode": "n_readme_setup_script",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_pca9685_readme_direct_pwm_mode",
+      "fromNode": "n_readme_pca9685",
+      "toNode": "n_readme_direct_pwm_mode",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_readme_tether_reel_motor_readme_launcher_reel_motor",
+      "fromNode": "n_readme_tether_reel_motor",
+      "toNode": "n_readme_launcher_reel_motor",
+      "label": "semantically_similar_to [INFERRED]"
+    },
+    {
+      "id": "e_readme_rs485_modbus_encoder_readme_direction_inversion",
+      "fromNode": "n_readme_rs485_modbus_encoder",
+      "toNode": "n_readme_direction_inversion",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_web_ui_readme_rest_api",
+      "fromNode": "n_readme_web_ui",
+      "toNode": "n_readme_rest_api",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_readme_fastapi_server_requirements_uvicorn",
+      "fromNode": "n_readme_fastapi_server",
+      "toNode": "n_requirements_uvicorn",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_readme_rest_api_requirements_fastapi_versioning",
+      "fromNode": "n_readme_rest_api",
+      "toNode": "n_requirements_fastapi_versioning",
+      "label": "references [INFERRED]"
+    },
+    {
+      "id": "e_readme_tether_management_system_claude_md_graphify",
+      "fromNode": "n_readme_tether_management_system",
+      "toNode": "n_claude_md_graphify",
+      "label": "references [EXTRACTED]"
+    },
+    {
+      "id": "e_readme_ff_p_controller_readme_direct_pwm_mode",
+      "fromNode": "n_readme_ff_p_controller",
+      "toNode": "n_readme_direct_pwm_mode",
+      "label": "semantically_similar_to [INFERRED]"
+    }
+  ]
+}

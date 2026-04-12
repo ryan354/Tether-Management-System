@@ -1,0 +1,1 @@
+{"nodes": [{"id": "app_setup_py", "label": "setup.py", "file_type": "code", "source_file": "app\\setup.py", "source_location": "L1"}], "edges": [{"source": "app_setup_py", "target": "setuptools", "relation": "imports_from", "confidence": "EXTRACTED", "source_file": "app\\setup.py", "source_location": "L1", "weight": 1.0}]}
